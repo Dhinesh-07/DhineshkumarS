@@ -1,6 +1,6 @@
 package com.atdxt.JDBCConnection;
 
-import com.atdxt.JDBCConnection.Model.dao;
+import com.atdxt.JDBCConnection.Model.MyDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -9,10 +9,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class JdbcConnectionApplication implements CommandLineRunner {
 
-	private final dao myDao;
+	private final MyDao myDao;
 
 	@Autowired
-	public JdbcConnectionApplication(dao myDao) {
+	public JdbcConnectionApplication(MyDao myDao) {
 
 		this.myDao = myDao;
 	}

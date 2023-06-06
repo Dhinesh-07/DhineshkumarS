@@ -5,16 +5,16 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class bean {
+public class MyBean {
 
     private Integer id;
     private String name;
     private String email;
 
-    public bean() {
+    public MyBean() {
     }
 
-    public bean(Integer id, String name, String email) {
+    public MyBean(Integer id, String name, String email) {
         this.id=id;
         this.name = name;
         this.email = email;

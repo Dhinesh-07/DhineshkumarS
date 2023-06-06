@@ -1,10 +1,8 @@
 package com.atdxt.JDBCConnection.Controller;
-import com.atdxt.JDBCConnection.Model.bean;
-import com.atdxt.JDBCConnection.Model.dao;
+import com.atdxt.JDBCConnection.Model.MyBean;
+import com.atdxt.JDBCConnection.Model.MyDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,20 +10,21 @@ import java.util.List;
 @RestController
 public class AppController {
 
-    private final dao myDao;
+    private final MyDao myDao;
 
     @Autowired
-    public AppController(dao myDao) {
+    public AppController(MyDao myDao) {
+
         this.myDao = myDao;
     }
 
-    @GetMapping("/api/data")
-    public List<bean> showData() {
+    @GetMapping("/api")
+    public List<MyBean> showData() {
 
         return myDao.showData();
     }
 
-
+/*
     @PostMapping("/data/{name}/{email}")
     @ResponseStatus(HttpStatus.CREATED)
     public void addData(@PathVariable String name, @PathVariable String email) {
@@ -33,16 +32,18 @@ public class AppController {
         myDao.addData(data);
     }
 
+ */
 
 
-/*
+
+
     @PostMapping("/data")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addData(@RequestBody bean data) {
+    public void addData(@RequestBody MyBean data) {
         myDao.addData(data);
     }
 
- */
+
 
 
 
