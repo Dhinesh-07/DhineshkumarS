@@ -5,9 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,8 +20,30 @@ public class AppController {
     }
 
     @GetMapping("/api/data")
-    public ResponseEntity<List<bean>> fetchData() {
-        List<bean> data = myDao.fetchData();
-        return ResponseEntity.ok(data);
+    public List<bean> showData() {
+
+        return myDao.showData();
     }
+
+
+    @PostMapping("/data/{name}/{email}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void addData(@PathVariable String name, @PathVariable String email) {
+        bean data = new bean(null, name, email); // Set id as null
+        myDao.addData(data);
+    }
+
+
+
+/*
+    @PostMapping("/data")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void addData(@RequestBody bean data) {
+        myDao.addData(data);
+    }
+
+ */
+
+
+
 }

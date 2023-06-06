@@ -13,6 +13,7 @@ public class JdbcConnectionApplication implements CommandLineRunner {
 
 	@Autowired
 	public JdbcConnectionApplication(dao myDao) {
+
 		this.myDao = myDao;
 	}
 
@@ -22,6 +23,6 @@ public class JdbcConnectionApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		myDao.fetchData();
+		myDao.showData();
 	}
 }

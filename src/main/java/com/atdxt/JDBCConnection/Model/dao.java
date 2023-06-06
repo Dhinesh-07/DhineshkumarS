@@ -16,7 +16,16 @@ public class dao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<bean> fetchData() {
+
+
+
+    public void addData(bean data) {
+        String query = "INSERT INTO demo (name, email) VALUES (?, ?)";
+        jdbcTemplate.update(query, data.getName(), data.getEmail());
+    }
+
+
+    public List<bean> showData() {
         String query = "SELECT * FROM demo";
         List<bean> result = jdbcTemplate.query(query, (rs, rowNum) -> {
             Integer id = rs.getInt("id");
