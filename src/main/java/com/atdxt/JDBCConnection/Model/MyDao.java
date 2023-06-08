@@ -20,13 +20,13 @@ public class MyDao {
 
 
     public void addData(MyBean data) {
-        String query = "INSERT INTO demo (name, email) VALUES (?, ?)";
+        String query = "INSERT INTO dhinesh_demo (name, email) VALUES (?, ?)";
         jdbcTemplate.update(query, data.getName(), data.getEmail());
     }
 
 
     public List<MyBean> showData() {
-        String query = "SELECT * FROM demo";
+        String query = "SELECT * FROM dhinesh_demo";
         List<MyBean> result = jdbcTemplate.query(query, (rs, rowNum) -> {
             Integer id = rs.getInt("id");
             String name = rs.getString("name");
