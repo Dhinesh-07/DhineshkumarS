@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6c4813e5-ffbb-4da9-ab84-797ac4f74441" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/JDBC_Connection/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/JDBC_Connection/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JDBC_Connection/src/main/resources/logback.xml" beforeDir="false" afterPath="$PROJECT_DIR$/JDBC_Connection/src/main/resources/logback.xml" afterDir="false" />
-    </list>
+    <list default="true" id="6c4813e5-ffbb-4da9-ab84-797ac4f74441" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
