@@ -1,0 +1,30 @@
+<configuration>
+    <property name="appName" value="YourApplication" />
+
+    <appender name="fileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${user.home}/logs/application.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%date{yyyy-MM-dd HH:mm:ss} [${appName}] %message%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${user.home}/logs/application-%d{yyyy-MM-dd_HH-mm}-%i.log</fileNamePattern>
+            <maxHistory>10</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+                <maxHistory>10</maxHistory>
+                <cleanHistoryOnStart>true</cleanHistoryOnStart>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+                <maxFileSize>100MB</maxFileSize>
+            </triggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    <logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
+        <appender-ref ref="fileAppender" />
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="fileAppender" />
+    </root>
+</configuration>
