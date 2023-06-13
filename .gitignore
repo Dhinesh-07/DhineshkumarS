@@ -33,4 +33,4 @@ build/
 .vscode/
 
 ###mvn update###
-.mvn/wrapper/
+.mvn/
