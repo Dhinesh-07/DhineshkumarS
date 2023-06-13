@@ -1,32 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="WARN">
-    <Properties>
-        <Property name="appName">Jdbc_Connection</Property>
-        <Property name="appInfo">MyApplication</Property>
-        <Property name="logPath">/var/log/JDBC_Connection</Property>
-    </Properties>
+<Configuration>
     <Appenders>
-        <RollingFile name="RollingFile" fileName="${logPath}/app.log"
-                     filePattern="${logPath}/${appInfo}-${appName}-%d{yyyy-MM-dd-HH-mm}.log">
-            <PatternLayout pattern="%d %-5p [%t] %c{1} - %m%n" />
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="%style{%d{ISO8601}}{black} %highlight{%-5level }[%style{%t}{bright,blue}] %style{%C{1.}}{bright,yellow}: %msg%n%throwable" />
+        </Console>
+
+        <RollingFile name="RollingFile"
+                     fileName="/var/log/JDBC_Connection/application.log"
+                     filePattern="/var/log/JDBC_Connection/spring-boot-logger-log4j2-%d{yyyy-MM-dd-HH-mm}.log">
+            <PatternLayout>
+                <pattern>%d %p %C{1.} [%t] %m%n</pattern>
+            </PatternLayout>
             <Policies>
-                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+                <TimeBasedTriggeringPolicy interval="10" modulate="true" />
             </Policies>
-            <DefaultRolloverStrategy max="10" />
         </RollingFile>
     </Appenders>
+
     <Loggers>
         <Root level="info">
+            <AppenderRef ref="Console" />
             <AppenderRef ref="RollingFile" />
         </Root>
-        <Logger name="com.atdxt.JDBCConnection" level="debug">
-            <AppenderRef ref="RollingFile" />
-        </Logger>
-        <Logger name="org.hibernate.SQL" level="debug">
-            <AppenderRef ref="RollingFile" />
-        </Logger>
-        <Logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="trace">
-            <AppenderRef ref="RollingFile" />
-        </Logger>
+
+        <Logger name="com.atdxt.JDBCConnection" level="trace" />
+
     </Loggers>
 </Configuration>

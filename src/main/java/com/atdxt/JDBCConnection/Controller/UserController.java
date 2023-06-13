@@ -2,6 +2,8 @@ package com.atdxt.JDBCConnection.Controller;
 
 import com.atdxt.JDBCConnection.Model.User;
 import com.atdxt.JDBCConnection.Repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -11,33 +13,33 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-
 public class UserController {
+
     @Autowired
     private UserRepository userRepository;
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-
-
-    @GetMapping(path="/all")
-    public @ResponseBody Iterable<User> getAllUsers() {
-
-        return userRepository.findAll();
+    @GetMapping(path = "/all")
+    public @ResponseBody
+    Iterable<User> getAllUsers() {
+        try {
+            logger.info("Getting all data from the database");
+            return userRepository.findAll();
+        } catch (Exception e) {
+            logger.error("Error:", e);
+            throw e;
+        }
     }
 
-        @PostMapping("/add")
-        public ResponseEntity <String> addNewUser(@RequestBody User user ) {
-
+    @PostMapping("/add")
+    public ResponseEntity<String> addNewUser(@RequestBody User user) {
+        try {
             userRepository.save(user);
+            logger.info("Adding data to the database");
             return ResponseEntity.ok("Saved Successfully");
+        } catch (Exception e) {
+            logger.error("Error:", e);
+            throw e;
         }
-
-
-
-
-
-
-
-
-
+    }
 }
-
