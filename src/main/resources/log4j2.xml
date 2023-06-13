@@ -8,13 +8,14 @@
 
         <RollingFile name="RollingFile"
                      fileName="/var/log/JDBC_Connection/application.log"
-                     filePattern="/var/log/JDBC_Connection/spring-boot-logger-log4j2-%d{yyyy-MM-dd-HH-mm}.log">
+                     filePattern="/var/log/JDBC_Connection/spring-logger-%d{yyyyMMdd-HHmm}.log">
             <PatternLayout>
                 <pattern>%d %p %C{1.} [%t] %m%n</pattern>
             </PatternLayout>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="10" modulate="true" />
             </Policies>
+            <DefaultRolloverStrategy max="10" />
         </RollingFile>
     </Appenders>
 
@@ -24,7 +25,12 @@
             <AppenderRef ref="RollingFile" />
         </Root>
 
-        <Logger name="com.atdxt.JDBCConnection" level="trace" />
-
+        <Logger name="com.atdxt.JDBCConnection" level="trace">
+            <AppenderRef ref="RollingFile" />
+        </Logger>
+        <Logger name="com.atdxt.JDBCConnection" level="error">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="RollingFile" />
+        </Logger>
     </Loggers>
 </Configuration>
