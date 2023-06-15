@@ -8,7 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class JdbcConnectionApplication {
+public class LoggingApplication {
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
 	public static void main(String[] args) {
@@ -22,7 +22,7 @@ public class JdbcConnectionApplication {
 			logger.error("error bound",e);
 		}
 
-		SpringApplication.run(JdbcConnectionApplication.class, args);
+		SpringApplication.run(LoggingApplication.class, args);
 	}
 
 }

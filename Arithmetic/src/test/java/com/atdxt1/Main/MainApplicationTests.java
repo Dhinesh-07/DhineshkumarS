@@ -1,10 +1,10 @@
-package com.atdxt.JDBCConnection;
+package com.atdxt1.Main;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class JdbcConnectionApplicationTests {
+class MainApplicationTests {
 
 	@Test
 	void contextLoads() {
