@@ -1,4 +1,4 @@
-package com.atdxt.service.Controller;
+package com.atdxt;
 
 import com.atdxt.service.Model.User;
 import com.atdxt.service.Repository.UserRepository;

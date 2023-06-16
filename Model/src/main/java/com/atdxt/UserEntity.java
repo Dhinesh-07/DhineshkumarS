@@ -1,10 +1,10 @@
-package com.atdxt.service.Model;
+package com.atdxt;
 
 import jakarta.persistence.*;
 
 @Entity
 @Table(name="dhinesh_demo")
-public class User {
+public class UserEntity {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
