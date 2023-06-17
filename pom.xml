@@ -19,8 +19,6 @@
 
 		<module>Module_2</module>
 		<module>Model</module>
-
-
 		<module>Repository</module>
 		<module>Controller</module>
 
@@ -38,6 +36,20 @@
             </dependency>
         </dependencies>
     -->
+<dependencies>
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-web</artifactId>
+		<version>3.1.0</version>
+		<exclusions>
+			<exclusion>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-logging</artifactId>
+			</exclusion>
+		</exclusions>
+	</dependency>
+
+</dependencies>
 
 	<build>
 		<plugins>

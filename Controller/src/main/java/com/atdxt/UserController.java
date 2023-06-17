@@ -1,7 +1,6 @@
 package com.atdxt;
 
-import com.atdxt.service.Model.User;
-import com.atdxt.service.Repository.UserRepository;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,7 @@ public class UserController {
 
     @GetMapping(path = "/all")
     public @ResponseBody
-    Iterable<User> getAllUsers() {
+    Iterable<UserEntity> getAllUsers() {
         try {
             logger.info("Getting all data from the database");
             return userRepository.findAll();
@@ -32,7 +31,7 @@ public class UserController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> addNewUser(@RequestBody User user) {
+    public ResponseEntity<String> addNewUser(@RequestBody UserEntity user) {
         try {
             userRepository.save(user);
             logger.info("Adding data to the database");

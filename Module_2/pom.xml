@@ -16,17 +16,7 @@
 <packaging>war</packaging>
     <dependencies>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <version>3.1.0</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -39,7 +29,18 @@
         </dependency>
         <dependency>
             <groupId>com.atdxt</groupId>
-            <artifactId>Module_1</artifactId>
+            <artifactId>Model</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>    <dependency>
+        <groupId>com.atdxt</groupId>
+        <artifactId>Repository</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <scope>compile</scope>
+    </dependency>
+        <dependency>
+            <groupId>com.atdxt</groupId>
+            <artifactId>Controller</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
@@ -48,18 +49,7 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
             <version>3.1.0</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-log4j2</artifactId>
-            <version>3.1.0</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-    </dependencies>
+</dependencies>
 
     <build>
         <plugins>
