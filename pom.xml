@@ -17,7 +17,7 @@
 
 	<modules>
 
-		<module>Module_2</module>
+		<module>Application</module>
 		<module>Model</module>
 		<module>Repository</module>
 		<module>Controller</module>
