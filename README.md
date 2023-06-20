@@ -5,10 +5,12 @@ This project contains a multimodule application built using Spring MVC framework
 ## Table of Contents
 
 - [Introduction](#introduction)
-- [Requirements](#Requirements)
-- [Project Structure](#Project Structure)
+- [Requirements](#requirements)
+- [Project Structure](#project-structure)
 - [Installation](#installation)
-- [Conclusion](#Conclusion)
+
+
+
 ## Introduction
 
 This project is a multimodule application developed using the Spring MVC framework. It provides a flexible and scalable architecture for building web applications. The main focus of this project is to handle HTTP POST and GET methods effectively. Additionally, it incorporates logging functionality to capture and store all relevant information about the project.
@@ -23,50 +25,55 @@ This project is a multimodule application developed using the Spring MVC framewo
 
 
 ## Project Structure
-----------------
-Module
-├── Application
-│   ├── pom.xml
-│   └── src
-│       └── main
-│           ├── java
-│           │   └── com
-│           │       └── atdxt
-│           │           ├── BoxApplication.java
-│           │           └── ServletInitializer.java
-│           └── resources
-│               ├── application.properties
-│               └── log4j2.xml
-├── Controller
-│   ├── pom.xml
-│   └── src
-│       └── main
-│           └── java
-│               └── com
-│                   └── atdxt
-│                       └── UserController.java
-├── Data_Module
-│   └── dhinesh_db.sql
-├── Model
-│   ├── pom.xml
-│   └── src
-│       └── main
-│           └── java
-│               └── com
-│                   └── atdxt
-│                       └── UserEntity.java
-├── pom.xml
-├── README.md
-└── Repository
-├── pom.xml
-└── src
-└── main
-└── java
-└── com
-└── atdxt
-└── UserRepository.java
 
 
+The project consists of the following modules and directories:
+
+- Application
+    - pom.xml
+    - src
+        - main
+            - java
+                - com
+                    - atdxt
+                        - BoxApplication.java
+                        - ServletInitializer.java
+            - resources
+                - application.properties
+                - log4j2.xml
+
+- Controller
+    - pom.xml
+    - src
+        - main
+            - java
+                - com
+                    - atdxt
+                        - UserController.java
+
+- Data_Module
+    - dhinesh_db.sql
+
+- Model
+    - pom.xml
+    - src
+        - main
+            - java
+                - com
+                    - atdxt
+                        - UserEntity.java
+
+- Repository
+    - pom.xml
+    - src
+        - main
+            - java
+                - com
+                    - atdxt
+                        - UserRepository.java
+
+- pom.xml
+- README.md
 
 ## Installation
 
