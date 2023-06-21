@@ -1,6 +1,6 @@
-# Logging_Multimodule 
+# Logging_Multimodule
 
-This project contains a multimodule application built using Spring MVC framework. It provides functionality for handling both HTTP POST and GET methods. Additionally, the project is equipped with logging capabilities to track and store project activities in a file. 
+This project contains a multimodule application built using Spring MVC framework. It provides functionality for handling both HTTP POST and GET methods. Additionally, the project is equipped with logging capabilities to track and store project activities in a file.
 
 ## Table of Contents
 
@@ -8,6 +8,7 @@ This project contains a multimodule application built using Spring MVC framework
 - [Requirements](#requirements)
 - [Project Structure](#project-structure)
 - [Installation](#installation)
+- [Project Usage Instructions](#project-usage-instructions)
 
 
 
@@ -29,7 +30,7 @@ This project is a multimodule application developed using the Spring MVC framewo
 
 The project consists of the following modules and directories:
 
-- Application
+- **Application**
     - pom.xml
     - src
         - main
@@ -42,7 +43,7 @@ The project consists of the following modules and directories:
                 - application.properties
                 - log4j2.xml
 
-- Controller
+- **Controller**
     - pom.xml
     - src
         - main
@@ -51,10 +52,10 @@ The project consists of the following modules and directories:
                     - atdxt
                         - UserController.java
 
-- Data_Module
+- **Data_Module**
     - dhinesh_db.sql
 
-- Model
+- **Model**
     - pom.xml
     - src
         - main
@@ -63,7 +64,7 @@ The project consists of the following modules and directories:
                     - atdxt
                         - UserEntity.java
 
-- Repository
+- **Repository**
     - pom.xml
     - src
         - main
@@ -72,8 +73,8 @@ The project consists of the following modules and directories:
                     - atdxt
                         - UserRepository.java
 
-- pom.xml
-- README.md
+- **pom.xml**
+- **README.md**
 
 ## Installation
 
@@ -87,24 +88,63 @@ Step 1: clone the project
       git clone git@github.com:Dhinesh-07/DhineshkumarS.git
 
 Step 2: Create a database (MySQL)
-- install mysql and create a database named as "dhinesh"
+- install mysql.
+- log in to MySQL as the root user using the following command:
+
+      mysql -u root -p
+- create a database.
+
+      CREATE DATABASE name;
+
+Step 3: Import Database Schema
 - Locate the dhines_db.sql file inside the Data_Module directory of the cloned project.
 - Use this command to import the schema:
 
       mysql -u your_mysql_username -p dhinesh < Data_Module/dhines_db.sql
 - Check whether the database has been successfully created or not.
 
-Step 3:Build and Run the Project
+Step 4: Update Application Configuration
+
+- Open the **application.properties** file in your Spring Boot project.
+- Update the following properties with your MySQL database credentials:
+
+       spring.datasource.url=jdbc:mysql://localhost:3306/name
+       spring.datasource.username=your_mysql_username
+       spring.datasource.password=your_mysql_password
+
+Step 5:Build and Run the Project
 - Navigate to the project directory and clean and build the project using the command: mvn clean install.
 - Then, start running the project by executing:
 
       mvn spring-boot:run.
 
-After executing the previous steps, the project will be running locally on localhost:8080. 
-- To retrieve all data from the project, you can send a GET request using curl to the endpoint:  
+
+## Project Usage Instructions
+
+**Locally**
+
+- After following the previous setup steps, the project will be running locally on localhost:8080.
+- To retrieve all data from the project, execute the following command in your terminal:
 
       curl http://localhost:8080/all
-- To add new data to the project, you need to send a POST request using curl to the endpoint: 
 
-      curl -X POST http://localhost:8080/add
+To add new data to the project, use the following command:
+
+      curl -X POST -H "Content-Type: application/json" -d '{"name":"nikhil","email":"nikhil@gmail.com"}' http://localhost:8080/add
+
+**On AWS Server**
+
+- Access the project on the AWS server using the following URL:
+
+      http://ec2-16-170-203-101.eu-north-1.compute.amazonaws.com:8080.
+
+- To retrieve all data from the project, use the following command:
+
+
+     curl http://ec2-16-170-203-101.eu-north-1.compute.amazonaws.com:8080/all
+
+- To add new data to the project on the server, use the following command:
+
+      curl -X POST -H "Content-Type: application/json" -d '{"name":"","email":""}' http://ec2-16-170-203-101.eu-north-1.compute.amazonaws.com:8080/add
+
 
