@@ -82,19 +82,29 @@ To install and set up the project locally, follow these steps:
 
 
 Step 1: clone the project
-- Clone the repository from GitHub using the following command:git clone git@github.com:Dhinesh-07/DhineshkumarS.git
+- Clone the repository from GitHub using the following command:
+
+      git clone git@github.com:Dhinesh-07/DhineshkumarS.git
 
 Step 2: Create a database (MySQL)
 - install mysql and create a database named as "dhinesh"
 - Locate the dhines_db.sql file inside the Data_Module directory of the cloned project.
-- Use this command to import the schema: mysql -u your_mysql_username -p dhinesh < Data_Module/dhines_db.sql
+- Use this command to import the schema:
+
+      mysql -u your_mysql_username -p dhinesh < Data_Module/dhines_db.sql
 - Check whether the database has been successfully created or not.
 
 Step 3:Build and Run the Project
 - Navigate to the project directory and clean and build the project using the command: mvn clean install.
-- Then, start running the project by executing: mvn spring-boot:run.
+- Then, start running the project by executing:
+
+      mvn spring-boot:run.
 
 After executing the previous steps, the project will be running locally on localhost:8080. 
-- To retrieve all data from the project, you can send a GET request using curl to the endpoint:  curl http://localhost:8080/all
-- To add new data to the project, you need to send a POST request using curl to the endpoint: curl -X POST http://localhost:8080/add
+- To retrieve all data from the project, you can send a GET request using curl to the endpoint:  
+
+      curl http://localhost:8080/all
+- To add new data to the project, you need to send a POST request using curl to the endpoint: 
+
+      curl -X POST http://localhost:8080/add
 
