@@ -136,15 +136,15 @@ To add new data to the project, use the following command:
 
 - Access the project on the AWS server using the following URL:
 
-      http://ec2-16-170-203-101.eu-north-1.compute.amazonaws.com:8080.
+      http://ec2-16-171-15-124.eu-north-1.compute.amazonaws.com:8080.
 
 - To retrieve all data from the project, use the following command:
 
 
-     curl http://ec2-16-170-203-101.eu-north-1.compute.amazonaws.com:8080/all
+     curl http://ec2-16-171-15-124.eu-north-1.compute.amazonaws.com:8080/all
 
 - To add new data to the project on the server, use the following command:
 
-      curl -X POST -H "Content-Type: application/json" -d '{"name":"","email":""}' http://ec2-16-170-203-101.eu-north-1.compute.amazonaws.com:8080/add
+      curl -X POST -H "Content-Type: application/json" -d '{"name":"","email":""}' http://ec2-16-171-15-124.eu-north-1.compute.amazonaws.com:8080/add
 
 
