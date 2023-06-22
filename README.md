@@ -9,7 +9,7 @@ This project contains a multimodule application built using Spring MVC framework
 - [Project Structure](#project-structure)
 - [Installation](#installation)
 - [Project Usage Instructions](#project-usage-instructions)
-
+- [Database Connection Details](#database-connection-details)
 
 
 ## Introduction
@@ -130,21 +130,42 @@ Step 5:Build and Run the Project
 
 To add new data to the project, use the following command:
 
-      curl -X POST -H "Content-Type: application/json" -d '{"name":"nikhil","email":"nikhil@gmail.com"}' http://localhost:8080/add
+      curl -X POST -H "Content-Type: application/json" -d '{"name":"","email":""}' http://localhost:8080/add
+
+
 
 **On AWS Server**
-
-- Access the project on the AWS server using the following URL:
-
-      http://ec2-16-171-15-124.eu-north-1.compute.amazonaws.com:8080.
-
-- To retrieve all data from the project, use the following command:
+- you can access the project using the following URL: http://ec2-13-48-10-192.eu-north-1.compute.amazonaws.com:8080.
 
 
-     curl http://ec2-16-171-15-124.eu-north-1.compute.amazonaws.com:8080/all
+**Get**
 
-- To add new data to the project on the server, use the following command:
+- To retrieve all data from the project, you can send an HTTP GET request to the server using the following command:
 
-      curl -X POST -H "Content-Type: application/json" -d '{"name":"","email":""}' http://ec2-16-171-15-124.eu-north-1.compute.amazonaws.com:8080/add
+      curl http://ec2-13-48-10-192.eu-north-1.compute.amazonaws.com:8080/all
 
+- The response will be a JSON array containing the retrieved data. Here's an example output:
+
+[{"id":1,"name":"","email":""},{"id":2,"name":"dk","email":"kumar"},{"id":3,"name":"dhinesh","email":"dhinesh@gmail.com"},{"id":4,"name":"kumar","email":"kumar@gmail.com"}]
+
+
+**Post**
+
+- If you want to add new data to the project on the server, you can send an HTTP POST request with the required data in the request body. Use the following command:
+
+      curl -X POST -H "Content-Type: application/json" -d '{"name":"", "email":""}' http://ec2-13-48-10-192.eu-north-1.compute.amazonaws.com:8080/add
+
+  - Upon successful addition of the data, the server will respond with the message
+             
+        **"Saved Successfully."**
+
+## Database Connection Details
+
+- **Endpoint**:                            
+                  
+      mydbinstance.cxdmxw1ewbmc.eu-north-1.rds.amazonaws.com
+
+- **Port**: 3306
+- **Username**: dhineshkumar
+- **Password**: dhinesh0
 
