@@ -137,9 +137,12 @@ To add new data to the project, use the following command:
 **On AWS Server**
 - you can access the project using the following URL: http://ec2-13-48-10-192.eu-north-1.compute.amazonaws.com:8080.
 
-- Access the project on the AWS server using the following URL:
 
+<<<<<<< HEAD
+      curl http://ec2-16-171-15-124.eu-north-1.compute.amazonaws.com:8080/all
+=======
 **Get**
+>>>>>>> Logging_mvc
 
 - To retrieve all data from the project, you can send an HTTP GET request to the server using the following command:
 
@@ -149,7 +152,6 @@ To add new data to the project, use the following command:
 
 [{"id":1,"name":"","email":""},{"id":2,"name":"dk","email":"kumar"},{"id":3,"name":"dhinesh","email":"dhinesh@gmail.com"},{"id":4,"name":"kumar","email":"kumar@gmail.com"}]
 
-      curl -X POST -H "Content-Type: application/json" -d '{"name":"","email":""}' http://ec2-16-171-15-124.eu-north-1.compute.amazonaws.com:8080/add
 
 **Post**
 
