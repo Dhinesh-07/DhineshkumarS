@@ -135,14 +135,14 @@ To add new data to the project, use the following command:
 
 
 **On AWS Server**
-- you can access the project using the following URL: http://ec2-13-48-10-192.eu-north-1.compute.amazonaws.com:8080.
+- you can access the project using the following URL: http://ec2-13-53-168-180.eu-north-1.compute.amazonaws.com:8080.
 
 
 **Get**
 
 - To retrieve all data from the project, you can send an HTTP GET request to the server using the following command:
 
-      curl http://ec2-13-48-10-192.eu-north-1.compute.amazonaws.com:8080/all
+      curl http://ec2-13-53-168-180.eu-north-1.compute.amazonaws.com:8080/all
 
 - The response will be a JSON array containing the retrieved data. Here's an example output:
 
@@ -153,19 +153,26 @@ To add new data to the project, use the following command:
 
 - If you want to add new data to the project on the server, you can send an HTTP POST request with the required data in the request body. Use the following command:
 
-      curl -X POST -H "Content-Type: application/json" -d '{"name":"", "email":""}' http://ec2-13-48-10-192.eu-north-1.compute.amazonaws.com:8080/add
+      curl -X POST -H "Content-Type: application/json" -d '{"name":"", "email":""}' http://ec2-13-53-168-180.eu-north-1.compute.amazonaws.com:8080/add
 
   - Upon successful addition of the data, the server will respond with the message
              
-        **"Saved Successfully."**
+        "Saved Successfully."
 
-## Database Connection Details
+## AWS Details
 
+
+**EC2 Instance**
+- **Public IPv4 DNS**
+        
+        ec2-13-53-168-180.eu-north-1.compute.amazonaws.com
+
+**RDS Instance**
 - **Endpoint**:                            
                   
-      mydbinstance.cxdmxw1ewbmc.eu-north-1.rds.amazonaws.com
+      http://mydbinstance.crezjjaofuyj.eu-north-1.rds.amazonaws.com/
 
 - **Port**: 3306
-- **Username**: dhineshkumar
-- **Password**: dhinesh0
+- **Username**: dhinesh
+- **Password**: Dhinesh7
 
