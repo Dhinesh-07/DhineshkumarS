@@ -18,7 +18,7 @@ public class UserEntity {
     private String email;
 
     @Column(name = "date")
-    private LocalDate date;
+    private LocalDateTime date;
 
     @Column(name = "modified_date")
     private LocalDateTime modifiedDate;
@@ -47,13 +47,14 @@ public class UserEntity {
         this.email = email;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
+
 
     public LocalDateTime getModifiedDate() {
         return modifiedDate;

@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -45,7 +45,10 @@ public class UserController {
     @PostMapping("/add")
     public ResponseEntity<String> addNewUser(@RequestBody UserEntity user) {
         try {
-            userRepository.save(user);
+
+            user.setDate(LocalDateTime.now());
+
+           userRepository.save(user);
             logger.info("Adding data to the database");
             return ResponseEntity.ok("Saved Successfully");
         } catch (Exception e) {

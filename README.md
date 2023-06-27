@@ -10,7 +10,7 @@ This project contains a multimodule application built using Spring MVC framework
 - [Installation](#installation)
 - [Project Usage Instructions](#project-usage-instructions)
 - [Database Connection Details](#database-connection-details)
-
+- [Commands To Remember](#commands-to-remember)
 
 ## Introduction
 
@@ -149,8 +149,6 @@ To add new data to the project, use the following command:
 
 [{"id":1,"name":"","email":""},{"id":2,"name":"dk","email":"kumar"},{"id":3,"name":"dhinesh","email":"dhinesh@gmail.com"},{"id":4,"name":"kumar","email":"kumar@gmail.com"}]
 
-      curl -X POST -H "Content-Type: application/json" -d '{"name":"","email":""}' http://ec2-16-171-15-124.eu-north-1.compute.amazonaws.com:8080/add
-
 **Post**
 
 - If you want to add new data to the project on the server, you can send an HTTP POST request with the required data in the request body. Use the following command:
@@ -171,10 +169,40 @@ To add new data to the project, use the following command:
 
 **RDS Instance**
 - **Endpoint**:                            
-                  
-      http://mydbinstance.crezjjaofuyj.eu-north-1.rds.amazonaws.com/
+
+      mydbinstance.crezjjaofuyj.eu-north-1.rds.amazonaws.com
 
 - **Port**: 3306
 - **Username**: dhinesh
 - **Password**: Dhinesh7
 
+      mysql -h mydbinstance.crezjjaofuyj.eu-north-1.rds.amazonaws.com -P 3306 -u dhinesh -p
+
+
+## Commands to remember
+**Connect to EC2 Instance**
+
+To connect to your EC2 instance, follow these steps:
+
+Set the appropriate permissions for your key file:
+
+    chmod 400 Spring_boot.pem
+
+Connect to your instance using SSH and the Public DNS:
+
+    ssh -i "Spring_boot.pem" ubuntu@ec2-13-53-168-180.eu-north-1.compute.amazonaws.com
+
+
+**Scp command**
+
+Use the scp command to copy the file to the EC2 instance:
+
+    scp -i Spring_boot.pem /home/dhinesh/Downloads/war/Application-0.0.1-SNAPS
+
+**run war file using java**
+   
+    java -jar file_name
+
+**Importing to rds**
+
+    mysql -h mydbinstance.crezjjaofuyj.eu-north-1.rds.amazonaws.com -u dhinesh -p loggingmodule < Data_Module/dhines_db.sql
