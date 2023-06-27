@@ -5,7 +5,7 @@
             <PatternLayout pattern="%style{%d{ISO8601}}{black} %highlight{%-5level }[%style{%t}{bright,blue}] %style{%C{1.}}{bright,yellow}: %msg%n%throwable" />
         </Console>
 
-        <!-- Info File Appender -->
+
         <RollingFile name="InfoFile"
                      fileName="/var/log/JDBC_Connection/application-info.log"
                      filePattern="/var/log/JDBC_Connection/application-info-%d{yyyyMMdd-HHmm}.log">
@@ -13,7 +13,7 @@
                 <pattern>%d %p %C{1.} [%t] %m%n</pattern>
             </PatternLayout>
             <Filters>
-                <!-- Exclude error level logs -->
+
                 <ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL" />
             </Filters>
             <Policies>
@@ -22,7 +22,7 @@
             <DefaultRolloverStrategy max="10" />
         </RollingFile>
 
-        <!-- Error File Appender -->
+
         <RollingFile name="ErrorFile"
                      fileName="/var/log/JDBC_Connection/application-error.log"
                      filePattern="/var/log/JDBC_Connection/application-error-%d{yyyyMMdd-HHmm}.log">
@@ -41,7 +41,7 @@
     </Appenders>
 
     <Loggers>
-        <!-- Root Logger -->
+
         <Root level="info">
             <AppenderRef ref="Console" />
             <AppenderRef ref="InfoFile" />
