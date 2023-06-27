@@ -7,48 +7,52 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-
-import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.List;
 
 @Controller
+
 public class UserController {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserService userService;
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    @GetMapping(path = "/all")
-    public @ResponseBody
-    Iterable<UserEntity> getAllUsers() {
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @GetMapping(path="/all")
+    public ResponseEntity<List<UserEntity>> getAllUsers() {
         try {
             logger.info("Getting all data from the database");
-            return userRepository.findAll();
+            List<UserEntity> users = userService.getAllUsers();
+            return ResponseEntity.ok(users);
         } catch (Exception e) {
             logger.error("Error:", e);
             throw e;
         }
     }
-    @GetMapping(path = "/all/{id}")
-    public @ResponseBody
-    UserEntity getUserById(@PathVariable Integer id) {
+
+    @GetMapping(path ="all/{id}")
+    public ResponseEntity<UserEntity> getUserById(@PathVariable Integer id) {
         try {
             logger.info("Getting data from the database for ID: " + id);
-            Optional<UserEntity> user = userRepository.findById(id);
-            return user.orElse(null);
+            UserEntity user = userService.getUserById(id);
+            if (user != null) {
+                return ResponseEntity.ok(user);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
         } catch (Exception e) {
             logger.error("Error:", e);
             throw e;
         }
     }
 
-    @PostMapping("/add")
+    @PostMapping(path = "/add")
     public ResponseEntity<String> addNewUser(@RequestBody UserEntity user) {
         try {
-
-            user.setDate(LocalDateTime.now());
-
-           userRepository.save(user);
+            userService.addUser(user);
             logger.info("Adding data to the database");
             return ResponseEntity.ok("Saved Successfully");
         } catch (Exception e) {
@@ -57,17 +61,11 @@ public class UserController {
         }
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping(path ="/update/{id}")
     public ResponseEntity<String> updateUser(@PathVariable Integer id, @RequestBody UserEntity updatedUser) {
         try {
-            Optional<UserEntity> existingUser = userRepository.findById(id);
-            if (existingUser.isPresent()) {
-                UserEntity user = existingUser.get();
-                user.setName(updatedUser.getName());
-                user.setEmail(updatedUser.getEmail());
-                user.setModifiedDate(LocalDateTime.now()); // Set the modified date to the current date and time
-
-                userRepository.save(user);
+            boolean isUpdated = userService.updateUser(id, updatedUser);
+            if (isUpdated) {
                 logger.info("Updating user with ID: " + id);
                 return ResponseEntity.ok("User updated successfully");
             } else {

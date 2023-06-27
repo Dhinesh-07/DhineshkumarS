@@ -3,6 +3,7 @@ package com.atdxt;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "dhinesh_demo")
@@ -47,20 +48,31 @@ public class UserEntity {
         this.email = email;
     }
 
-    public LocalDateTime getDate() {
-        return date;
-    }
-
     public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
-
-    public LocalDateTime getModifiedDate() {
-        return modifiedDate;
-    }
-
     public void setModifiedDate(LocalDateTime modifiedDate) {
         this.modifiedDate = modifiedDate;
+    }
+
+    public String getFormattedDate() {
+        return formatDate(date);
+    }
+
+    public String getFormattedModifiedDate() {
+        return formatDate(modifiedDate);
+    }
+
+    private String formatDate(LocalDateTime dateTime) {
+        return dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
+
+    public LocalDateTime getParsedDate(String formattedDate) {
+        return LocalDateTime.parse(formattedDate, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
+
+    public LocalDateTime getParsedModifiedDate(String formattedModifiedDate) {
+        return LocalDateTime.parse(formattedModifiedDate, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 }
