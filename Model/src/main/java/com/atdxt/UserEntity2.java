@@ -1,13 +1,20 @@
 package com.atdxt;
 
+import com.atdxt.UserEntity;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "dhinesh_demo2")
 public class UserEntity2 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "city")
     private String city;
@@ -15,17 +22,26 @@ public class UserEntity2 {
     @Column(name = "country")
     private String country;
 
+    @Column(name = "date")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime date;
+
+    @Column(name = "modified_date")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime modifiedDate;
+
     @OneToOne
-    @JoinColumn(name = "dhinesh_demo_id")
+    @JsonBackReference
+    @JoinColumn(name = "id")
     private UserEntity user;
 
-    // Getters and Setters
 
-    public Long getId() {
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -45,6 +61,22 @@ public class UserEntity2 {
         this.country = country;
     }
 
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public LocalDateTime getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public void setModifiedDate(LocalDateTime modifiedDate) {
+        this.modifiedDate = modifiedDate;
+    }
+
     public UserEntity getUser() {
         return user;
     }
@@ -52,4 +84,5 @@ public class UserEntity2 {
     public void setUser(UserEntity user) {
         this.user = user;
     }
+
 }

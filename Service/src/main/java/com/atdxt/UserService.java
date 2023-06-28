@@ -2,63 +2,59 @@ package com.atdxt;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UserEntity2Repository userEntity2Repository;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, UserEntity2Repository userEntity2Repository) {
         this.userRepository = userRepository;
+        this.userEntity2Repository = userEntity2Repository;
     }
 
     public List<UserEntity> getAllUsers() {
-        try {
-            return userRepository.findAll();
-        } catch (Exception e) {
-            throw e;
-        }
+        return userRepository.findAll();
     }
 
     public UserEntity getUserById(Integer id) {
-        try {
-            Optional<UserEntity> user = userRepository.findById(id);
-            return user.orElse(null);
-        } catch (Exception e) {
-            throw e;
-        }
+        return userRepository.findById(id).orElse(null);
     }
 
-    public void addUser(UserEntity user) {
-        try {
-            user.setDate(LocalDateTime.now());
-            user.setModifiedDate(LocalDateTime.now());
-            userRepository.save(user);
-        } catch (Exception e) {
-            throw e;
-        }
+    public UserEntity createUser(UserEntity user) {
+        user.setDate(LocalDateTime.now());
+        user.setModifiedDate(LocalDateTime.now());
+        return userRepository.save(user);
     }
 
-    public boolean updateUser(Integer id, UserEntity updatedUser) {
-        try {
-            Optional<UserEntity> existingUser = userRepository.findById(id);
-            if (existingUser.isPresent()) {
-                UserEntity user = existingUser.get();
-                user.setName(updatedUser.getName());
-                user.setEmail(updatedUser.getEmail());
-                user.setModifiedDate(LocalDateTime.now());
-                userRepository.save(user);
-                return true;
-            } else {
-                return false;
+    public UserEntity updateUser(Integer id, UserEntity user) {
+        Optional<UserEntity> existingUser = userRepository.findById(id);
+        if (existingUser.isPresent()) {
+            UserEntity updatedUser = existingUser.get();
+            updatedUser.setName(user.getName());
+            updatedUser.setEmail(user.getEmail());
+            updatedUser.setModifiedDate(LocalDateTime.now());
+            return userRepository.save(updatedUser);
+        }
+        return null;
+    }
+
+    public List<UserEntity> getAllUsersWithDetails() {
+        List<UserEntity> users = userRepository.findAll();
+        for (UserEntity user : users) {
+            UserEntity2 user2 = user.getUserEntity2();
+            if (user2 != null) {
+                user2.setUser(null);
             }
-        } catch (Exception e) {
-            throw e;
         }
+        return users;
     }
 }

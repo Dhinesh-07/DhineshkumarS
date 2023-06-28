@@ -14,7 +14,7 @@
             </PatternLayout>
             <Filters>
 
-                <ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL" />
+                <ThresholdFilter level="error" onMatch="DENY" />
             </Filters>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="10" modulate="true" />
@@ -30,8 +30,8 @@
                 <pattern>%d %p %C{1.} [%t] %m%n</pattern>
             </PatternLayout>
             <Filters>
-                <!-- Include only error level logs -->
-                <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY" />
+
+                <ThresholdFilter level="error" onMatch="ACCEPT"  />
             </Filters>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="10" modulate="true" />

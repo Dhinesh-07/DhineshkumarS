@@ -1,15 +1,15 @@
 package com.atdxt;
 
+import org.apache.catalina.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 
 public class UserController {
 
@@ -33,47 +33,22 @@ public class UserController {
         }
     }
 
-    @GetMapping(path ="all/{id}")
-    public ResponseEntity<UserEntity> getUserById(@PathVariable Integer id) {
-        try {
-            logger.info("Getting data from the database for ID: " + id);
-            UserEntity user = userService.getUserById(id);
-            if (user != null) {
-                return ResponseEntity.ok(user);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } catch (Exception e) {
-            logger.error("Error:", e);
-            throw e;
-        }
+
+    @GetMapping(path="all/{id}")
+    public UserEntity getUserById(@PathVariable Integer id) {
+        return userService.getUserById(id);
     }
 
     @PostMapping(path = "/add")
-    public ResponseEntity<String> addNewUser(@RequestBody UserEntity user) {
-        try {
-            userService.addUser(user);
-            logger.info("Adding data to the database");
-            return ResponseEntity.ok("Saved Successfully");
-        } catch (Exception e) {
-            logger.error("Error:", e);
-            throw e;
-        }
+    public ResponseEntity<String> createUser(@RequestBody UserEntity user){
+        userService.createUser(user);
+        return ResponseEntity.ok("Saved successfully");
     }
 
-    @PutMapping(path ="/update/{id}")
-    public ResponseEntity<String> updateUser(@PathVariable Integer id, @RequestBody UserEntity updatedUser) {
-        try {
-            boolean isUpdated = userService.updateUser(id, updatedUser);
-            if (isUpdated) {
-                logger.info("Updating user with ID: " + id);
-                return ResponseEntity.ok("User updated successfully");
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } catch (Exception e) {
-            logger.error("Error:", e);
-            throw e;
-        }
+    @PutMapping(path="update/{id}")
+    public UserEntity updateUser(@PathVariable Integer id, @RequestBody UserEntity user) {
+        return userService.updateUser(id, user);
     }
+
+
 }

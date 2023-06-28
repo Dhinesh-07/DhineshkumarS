@@ -1,6 +1,8 @@
 package com.atdxt;
 
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -9,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "name")
     private String name;
@@ -18,9 +20,11 @@ public class UserEntity {
     private String email;
 
     @Column(name = "date")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime date;
 
     @Column(name = "modified_date")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime modifiedDate;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
@@ -28,11 +32,11 @@ public class UserEntity {
 
 
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -74,29 +78,5 @@ public class UserEntity {
 
     public void setUserEntity2(UserEntity2 userEntity2) {
         this.userEntity2 = userEntity2;
-    }
-
-    public String getFormattedDate() {
-        return formatDate(date);
-    }
-
-    public void setFormattedDate(String formattedDate) {
-        this.date = parseDate(formattedDate);
-    }
-
-    public String getFormattedModifiedDate() {
-        return formatDate(modifiedDate);
-    }
-
-    public void setFormattedModifiedDate(String formattedModifiedDate) {
-        this.modifiedDate = parseDate(formattedModifiedDate);
-    }
-
-    private String formatDate(LocalDateTime dateTime) {
-        return dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-    }
-
-    private LocalDateTime parseDate(String formattedDate) {
-        return LocalDateTime.parse(formattedDate, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 }
