@@ -21,9 +21,9 @@
 		<module>Model</module>
 		<module>Repository</module>
 		<module>Controller</module>
-		<module>Service</module>
+        <module>Exception</module>
 
-	</modules>
+    </modules>
 
 	<properties>
 		<java.version>17</java.version>
