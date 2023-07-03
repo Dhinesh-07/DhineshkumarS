@@ -139,11 +139,14 @@ To add new data to the project, use the following command:
 
 - Access the project on the AWS server using the following URL:
 
+
+**For Two table**
+
 **Get**
 
 - To retrieve all data from the project, you can send an HTTP GET request to the server using the following command:
 
-      curl http://ec2-13-53-168-180.eu-north-1.compute.amazonaws.com:8080/all
+      curl http://ec2-13-53-168-180.eu-north-1.compute.amazonaws.com:8080/users
 
 - The response will be a JSON array containing the retrieved data. Here's an example output:
 
@@ -153,11 +156,26 @@ To add new data to the project, use the following command:
 
 - If you want to add new data to the project on the server, you can send an HTTP POST request with the required data in the request body. Use the following command:
 
-      curl -X POST -H "Content-Type: application/json" -d '{"name":"", "email":""}' http://ec2-13-53-168-180.eu-north-1.compute.amazonaws.com:8080/add
+       curl -X POST -H "Content-Type: application/json" -d '{"name":"dDhinesh","email":"dhineshk@gmail.com","userEntity2":{"city":"chennai","country":"uk"}}' http://localhost:8080/users
 
   - Upon successful addition of the data, the server will respond with the message
              
         "Saved Successfully."
+
+**PUT**
+
+     curl -X PUT -H "Content-Type:application/json" -d '{"name":"dinesh","email":"dhineshk@gmail.com","userEntity2":{"city":"cuddalore","country":"uk"}}' http://localhost:8080/users/5
+
+
+**For Base 64**
+
+**Get**
+
+    curl http://localhost:8080/users/enget
+
+**Post**
+
+    curl -X POST -H "Content-Type: application/json" -d '{"username":"DK","password":"dhinesh@2"}' http://localhost:8080/users/enpost
 
 ## AWS Details
 
