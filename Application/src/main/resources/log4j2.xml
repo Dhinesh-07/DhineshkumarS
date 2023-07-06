@@ -1,57 +1,55 @@
-<Configuration>
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+
+    <Properties>
+        <Property name="appName">LOGGING fILE</Property>
+        <Property name="LOG_PATH">/var/log/JDBC_Connection</Property>
+    </Properties>
+
     <Appenders>
-        <!-- Console Appender -->
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%style{%d{ISO8601}}{black} %highlight{%-5level }[%style{%t}{bright,blue}] %style{%C{1.}}{bright,yellow}: %msg%n%throwable" />
+            <PatternLayout
+                    pattern="%style{%d{ISO8601}}{black} %highlight{%-5level }[%style{%t}{bright,blue}] %style{%C{1.}}{bright,yellow}: %msg%n%throwable" />
         </Console>
 
-
-        <RollingFile name="InfoFile"
-                     fileName="/var/log/JDBC_Connection/application-info.log"
-                     filePattern="/var/log/JDBC_Connection/application-info-%d{yyyyMMdd-HHmm}.log">
-            <PatternLayout>
-                <pattern>%d %p %C{1.} [%t] %m%n</pattern>
-            </PatternLayout>
-            <Filters>
-
-                <ThresholdFilter level="error" onMatch="DENY" />
-            </Filters>
+        <RollingFile name="InfoFile" fileName="${LOG_PATH}/info.log"
+                     filePattern="${LOG_PATH}/info-%d{yyyy-MM-dd_HH-mm}.%i.log">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%${appName}] [%-5level] %logger{36} - %msg%n" />
             <Policies>
-                <TimeBasedTriggeringPolicy interval="10" modulate="true" />
+                <OnStartupTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="10 MB" />
+                <CronTriggeringPolicy schedule="0 0/5 * * * ?" />
             </Policies>
+            <Filters>
+                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY" />
+            </Filters>
+
             <DefaultRolloverStrategy max="10" />
         </RollingFile>
 
-
-        <RollingFile name="ErrorFile"
-                     fileName="/var/log/JDBC_Connection/application-error.log"
-                     filePattern="/var/log/JDBC_Connection/application-error-%d{yyyyMMdd-HHmm}.log">
-            <PatternLayout>
-                <pattern>%d %p %C{1.} [%t] %m%n</pattern>
-            </PatternLayout>
-            <Filters>
-
-                <ThresholdFilter level="error" onMatch="ACCEPT"  />
-            </Filters>
+        <RollingFile name="ErrorFile" fileName="${LOG_PATH}/error.log"
+                     filePattern="${LOG_PATH}/error-%d{yyyy-MM-dd_HH-mm}.%i.log" >
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%${appName}] [%-5level] %logger{36} - %msg%n" />
             <Policies>
-                <TimeBasedTriggeringPolicy interval="10" modulate="true" />
+                <OnStartupTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="10 MB" />
+                <CronTriggeringPolicy schedule="0 0/5 * * * ?" />
             </Policies>
+            <Filters>
+                <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY" />
+            </Filters>
             <DefaultRolloverStrategy max="10" />
         </RollingFile>
     </Appenders>
 
     <Loggers>
-
         <Root level="info">
             <AppenderRef ref="Console" />
+
             <AppenderRef ref="InfoFile" />
+            <AppenderRef ref="ErrorFile"  />
         </Root>
 
-        <!-- Error Logger -->
-        <Logger name="com.atdxt.BoxApplication" level="error">
-            <AppenderRef ref="Console" />
-            <AppenderRef ref="ErrorFile" />
-        </Logger>
 
     </Loggers>
 </Configuration>

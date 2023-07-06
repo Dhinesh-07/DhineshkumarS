@@ -15,9 +15,11 @@ public class UserEntity {
     private Integer id;
     private String name;
     private String email;
-
     private String created_on;
     private String modify_time;
+    private String age;
+    private String phone_number;
+
     public UserEntity(){
     }
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

@@ -135,7 +135,7 @@ To add new data to the project, use the following command:
 
 
 **On AWS Server**
-- you can access the project using the following URL: http://ec2-13-53-168-180.eu-north-1.compute.amazonaws.com:8080.
+- you can access the project using the following URL: http://ec2-13-53-168-180.eu-north-1.compute.amazonaws.com:8080
 
 - Access the project on the AWS server using the following URL:
 

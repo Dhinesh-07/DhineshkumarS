@@ -66,6 +66,8 @@ public class UserController {
             UserEntity newUser = new UserEntity();
             newUser.setName(user.getName());
             newUser.setEmail(user.getEmail());
+            newUser.setAge(user.getAge());
+            newUser.setPhone_number(user.getPhone_number());
             userRepository.save(newUser);
 
             if(user.getUserEntity2() != null){
@@ -109,6 +111,8 @@ public class UserController {
                 UserEntity existingUser = userOptional.get();
                 existingUser.setName(user.getName());
                 existingUser.setEmail(user.getEmail());
+                existingUser.setAge(user.getAge());
+                existingUser.setPhone_number(user.getPhone_number());
 
 
 
