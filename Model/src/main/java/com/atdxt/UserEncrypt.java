@@ -9,7 +9,7 @@ import java.util.Base64;
 @Table(name = "dhinesh_demo3")
 @Setter
 @Getter
-public class UserEntity3 {
+public class UserEncrypt {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

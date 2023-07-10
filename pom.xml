@@ -22,8 +22,10 @@
 		<module>Repository</module>
 		<module>Controller</module>
         <module>Exception</module>
+		<module>Service</module>
 
-    </modules>
+
+	</modules>
 
 	<properties>
 		<java.version>17</java.version>

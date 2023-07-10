@@ -1,61 +1,58 @@
 package com.atdxt;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import org.springframework.validation.FieldError;
+
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
+
 
 @RestController
+@Validated
 @RequestMapping(path="/users")
 public class UserController {
-    private final UserRepository userRepository;
-    private final UserEntity2Repository userEntity2Repository;
-    private final UserEncryptRepository userEncryptRepository;
 
+    private final UserService userService;
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
-    public UserController(UserRepository userRepository, UserEntity2Repository userEntity2Repository, UserEncryptRepository userEncryptRepository) {
+    public UserController(UserService userService) {
 
-        this.userRepository = userRepository;
-        this.userEntity2Repository = userEntity2Repository;
-        this.userEncryptRepository = userEncryptRepository;
+        this.userService = userService;
 
     }
 
     @GetMapping
-    public @ResponseBody List<UserEntity> getAllUsers() {
+    public ResponseEntity<List<UserEntity>> getAllUsers() {
         try {
             logger.info("Fetching all users");
-            return userRepository.findAll();
-        }
-        catch (Exception e) {
+            List<UserEntity> users = userService.getAllUsers();
+            return ResponseEntity.ok(users);
+        } catch (Exception e) {
             logger.error("Error occurred while fetching users from the database", e);
             throw new CustomException("Error occurred while fetching users from the database.");
         }
-
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<UserEntity> getUserById(@PathVariable("id") Integer id) {
         try {
-            Optional<UserEntity> userOptional = userRepository.findById(id);
-            if (userOptional.isPresent()) {
-                UserEntity user = userOptional.get();
-                logger.info("Fetching the id users");
-                return ResponseEntity.ok(user);
-            } else {
-                throw new CustomException("User not found with ID: " + id);
-            }
+            UserEntity user = userService.getUserById(id);
+            logger.info("Fetching the user with ID: {}", id);
+            return ResponseEntity.ok(user);
         } catch (Exception e) {
             logger.error("Error occurred while fetching user from the database", e);
-            throw new CustomException("Error occurred while fetching user by id from the database.");
+            throw new CustomException("Error occurred while fetching user by ID from the database.");
         }
     }
 
@@ -63,78 +60,62 @@ public class UserController {
     @PostMapping
     public ResponseEntity<String> addUser(@RequestBody UserEntity user) {
         try {
-            UserEntity newUser = new UserEntity();
-            newUser.setName(user.getName());
-            newUser.setEmail(user.getEmail());
-            newUser.setAge(user.getAge());
-            newUser.setPhone_number(user.getPhone_number());
-            userRepository.save(newUser);
-
-            if(user.getUserEntity2() != null){
-                UserEntity2 userEntity2 = new UserEntity2();
-                userEntity2.setCity(user.getUserEntity2().getCity());
-                userEntity2.setCountry(user.getUserEntity2().getCountry());
-
-                SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                userEntity2.setCreated_on(sdf1.format(new Date()));
-
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                userEntity2.setModify_time(sdf.format(new Date()));
-
-                userEntity2Repository.save(userEntity2);
-                newUser.setUserEntity2(userEntity2);
+            if (!userService.isValidEmail(user.getEmail())) {
+                throw new CustomException("Invalid email address");
             }
 
-            SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            newUser.setCreated_on(sdf1.format(new Date()));
+            if (userService.isEmailExists(user.getEmail())) {
+                return ResponseEntity.badRequest().body("Email already exists,change Email address");
+            }
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            newUser.setModify_time(sdf.format(new Date()));
+            if (userService.isNameExists(user.getName())) {
+                return ResponseEntity.badRequest().body("Name already exists,Change Name ");
+            }
 
-            userRepository.save(newUser);
+            if (user.getPhone_number() != null) {
+                if (!userService.isValidPhoneNumber(user.getPhone_number())) {
+                    throw new CustomException("Invalid phone number");
+                }
+
+
+            }
+            userService.addUser(user);
             logger.info("User added successfully");
-
             return ResponseEntity.ok("User added successfully");
+        } catch (CustomException customEx) {
+            logger.error("CustomException occurred while adding users to the database", customEx);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(customEx.getMessage());
+        } catch (Exception ex) {
+            logger.error("Error occurred while adding users to the database", ex);
+            throw new CustomException("Error occurred while adding users to the database.");
         }
-        catch (Exception e) {
-            logger.error("Error occurred while fetching users from the database", e);
-            throw new CustomException("Error occurred while adding users from the database.");
-        }
-
     }
+
+
+
 
     @PutMapping("/{id}")
     public ResponseEntity<String> updateUser(@PathVariable("id") Integer id, @RequestBody UserEntity user) {
         try {
-            Optional<UserEntity> userOptional = userRepository.findById(id);
-            if (userOptional.isPresent()) {
-                UserEntity existingUser = userOptional.get();
-                existingUser.setName(user.getName());
-                existingUser.setEmail(user.getEmail());
-                existingUser.setAge(user.getAge());
-                existingUser.setPhone_number(user.getPhone_number());
+            if (!userService.isValidEmail(user.getEmail())) {
+                throw new CustomException("Invalid email address");
+            }
 
 
+            if (userService.isEmailExistsForOtherUser(user.getEmail(), id)) {
+                return ResponseEntity.badRequest().body("Email already exists");
+            }
+            if (user.getPhone_number() != null) {
+                    if (!userService.isValidPhoneNumber(user.getPhone_number())) {
+                        return ResponseEntity.badRequest().body("Phone number is not valid");
+                    }
 
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                existingUser.setModify_time(sdf.format(new Date()));
 
-                UserEntity2 userEntity2 = existingUser.getUserEntity2();
-                if(userEntity2 != null){
-                    userEntity2.setCity(user.getUserEntity2().getCity());
-                    userEntity2.setCountry(user.getUserEntity2().getCountry());
-
-                    userEntity2.setModify_time(sdf.format(new Date()));
-                    userEntity2Repository.save(userEntity2);
                 }
 
-                userRepository.save(existingUser);
-                logger.info("User updated successfully");
-
-                return ResponseEntity.ok("User updated successfully");
-            } else {
-                throw new CustomException("User not found with ID: " + id);
-            }
+            userService.updateUser(id, user);
+            logger.info("User updated successfully");
+            return ResponseEntity.ok("User updated successfully");
         } catch (Exception e) {
             logger.error("Error occurred while updating user with ID: " + id, e);
             throw new CustomException("Error occurred while updating user with ID: " + id);
@@ -142,20 +123,9 @@ public class UserController {
     }
 
     @PostMapping("/enpost")
-    public ResponseEntity<String> createUser(@RequestBody UserEntity3 userEntity3) {
+    public ResponseEntity<String> createUser(@RequestBody UserEncrypt userEncrypt) {
         try {
-            UserEntity3 userEncrypt1 = new UserEntity3();
-            userEncrypt1.setUsername(userEntity3.getUsername());
-            userEncrypt1.setPassword(userEntity3.getPassword());
-            SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            userEncrypt1.setCreated_on(sdf1.format(new Date()));
-
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            userEncrypt1.setModify_time(sdf.format(new Date()));
-
-            userEncrypt1.encryptPassword();
-            userEncryptRepository.save(userEncrypt1);
-
+            userService.saveUserEncrypt(userEncrypt);
             logger.info("User added successfully");
             return ResponseEntity.ok("User added successfully");
         } catch (Exception e) {
@@ -164,21 +134,20 @@ public class UserController {
         }
     }
 
-
-
     @GetMapping("/enget")
-    public List<UserEntity3> getUserData() {
+    public ResponseEntity<List<UserEncrypt>> getUserData() {
         try {
-            List<UserEntity3> userEncryptList = userEncryptRepository.findAll();
-            for (UserEntity3 userEntity3 : userEncryptList) {
-                userEntity3.decryptPassword();
-            }
+            List<UserEncrypt> userEncryptList = userService.getAllUserEncrypt();
             logger.info("Fetching all users");
-            return userEncryptList;
+            return ResponseEntity.ok(userEncryptList);
         } catch (Exception e) {
             logger.error("Error occurred while fetching users from the database", e);
             throw new CustomException("Error occurred while fetching users from the database.");
         }
     }
 
+
+
+
 }
+
