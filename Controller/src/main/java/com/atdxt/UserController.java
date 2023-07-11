@@ -1,5 +1,6 @@
 package com.atdxt;
 
+import org.springframework.ui.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class UserController {
 
     }
 
-    @GetMapping
+  /*  @GetMapping
     public ResponseEntity<List<UserEntity>> getAllUsers() {
         try {
             logger.info("Fetching all users");
@@ -41,7 +42,23 @@ public class UserController {
             logger.error("Error occurred while fetching users from the database", e);
             throw new CustomException("Error occurred while fetching users from the database.");
         }
+    }*/
+
+
+    @GetMapping
+    public String getAllUsers(Model model) {
+        try {
+            logger.info("Fetching all users");
+            List<UserEntity> users = userService.getAllUsers();
+            model.addAttribute("users", users);
+            return "users";
+        } catch (Exception e) {
+            logger.error("Error occurred while fetching users from the database", e);
+            throw new CustomException("Error occurred while fetching users from the database.");
+        }
     }
+
+
 
 
     @GetMapping("/{id}")
@@ -145,6 +162,8 @@ public class UserController {
             throw new CustomException("Error occurred while fetching users from the database.");
         }
     }
+
+
 
 
 

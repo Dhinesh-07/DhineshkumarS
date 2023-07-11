@@ -20,19 +20,30 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
-
+    @Column(name = "id")
     private Integer id;
+
     @NotBlank(message = "Name is required.")
+    @Column(name = "name")
     private String name;
 
     @NotBlank(message = "Email is required.")
     @Email(message = "Invalid email format.")
+    @Column(name = "email")
     private String email;
 
+    @Column(name = "age")
     private Integer age;
+
+
     @NotBlank(message = "no numbver")
+    @Column(name = "phone_number")
     private String phone_number;
+
+    @Column(name = "created_on")
     private String created_on;
+
+    @Column(name = "modify_time")
     private String modify_time;
 
 

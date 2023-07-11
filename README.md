@@ -10,6 +10,7 @@ This project contains a multimodule application built using Spring MVC framework
 - [Installation](#installation)
 - [Project Usage Instructions](#project-usage-instructions)
 - [Database Connection Details](#database-connection-details)
+-  [Docker](#docker)
 - [Commands To Remember](#commands-to-remember)
 
 ## Introduction
@@ -135,7 +136,7 @@ To add new data to the project, use the following command:
 
 
 **On AWS Server**
-- you can access the project using the following URL: http://ec2-13-53-168-180.eu-north-1.compute.amazonaws.com:8080
+- you can access the project using the following URL: http://ec2-13-48-193-15.eu-north-1.compute.amazonaws.com:8080
 
 - Access the project on the AWS server using the following URL:
 
@@ -146,7 +147,7 @@ To add new data to the project, use the following command:
 
 - To retrieve all data from the project, you can send an HTTP GET request to the server using the following command:
 
-      curl http://ec2-13-53-168-180.eu-north-1.compute.amazonaws.com:8080/users
+      curl http://ec2-13-48-193-15.eu-north-1.compute.amazonaws.com:8080/users
 
 - The response will be a JSON array containing the retrieved data. Here's an example output:
 
@@ -156,7 +157,13 @@ To add new data to the project, use the following command:
 
 - If you want to add new data to the project on the server, you can send an HTTP POST request with the required data in the request body. Use the following command:
 
-       curl -X POST -H "Content-Type: application/json" -d '{"name":"dDhinesh","email":"dhineshk@gmail.com","userEntity2":{"city":"chennai","country":"uk"}}' http://localhost:8080/users
+- For old api        
+
+      curl -X POST -H "Content-Type: application/json" -d '{"name":"dDhinesh","email":"dhineshk@gmail.com","userEntity2":{"city":"chennai","country":"uk"}}' http://localhost:8080/users
+
+- For new apo
+
+      curl -X POST -H "Content-Type: application/json" -d '{"name":"john","email":"john@gmail.com","phone_number":"789456120","age":"12","userEntity2":{"city":"chennai","country":"uk"}}' http://ec2-13-48-193-15.eu-north-1.compute.amazonaws.com:8080/users
 
   - Upon successful addition of the data, the server will respond with the message
              
@@ -183,7 +190,7 @@ To add new data to the project, use the following command:
 **EC2 Instance**
 - **Public IPv4 DNS**
         
-        ec2-13-53-168-180.eu-north-1.compute.amazonaws.com
+        ec2-13-48-193-15.eu-north-1.compute.amazonaws.com
 
 **RDS Instance**
 - **Endpoint**:                            
@@ -197,6 +204,16 @@ To add new data to the project, use the following command:
       mysql -h mydbinstance.crezjjaofuyj.eu-north-1.rds.amazonaws.com -P 3306 -u dhinesh -p
 
 
+## Docker Details 
+
+**docker user name= dhineshdk07**
+
+
+
+
+
+
+
 ## Commands to remember
 **Connect to EC2 Instance**
 
@@ -208,7 +225,7 @@ Set the appropriate permissions for your key file:
 
 Connect to your instance using SSH and the Public DNS:
 
-    ssh -i "Spring_boot.pem" ubuntu@ec2-13-53-168-180.eu-north-1.compute.amazonaws.com
+    ssh -i "Spring_boot.pem" ubuntu@ec2-13-48-193-15.eu-north-1.compute.amazonaws.com
 
 
 **Scp command**
