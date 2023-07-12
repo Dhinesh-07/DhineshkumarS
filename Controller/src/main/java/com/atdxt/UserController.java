@@ -1,20 +1,16 @@
 package com.atdxt;
 
-import org.springframework.ui.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.validation.FieldError;
+import org.springframework.web.servlet.ModelAndView;
 
-import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @RestController
@@ -32,6 +28,8 @@ public class UserController {
 
     }
 
+
+
   /*  @GetMapping
     public ResponseEntity<List<UserEntity>> getAllUsers() {
         try {
@@ -46,12 +44,42 @@ public class UserController {
 
 
     @GetMapping
-    public String getAllUsers(Model model) {
+    public ModelAndView getAllUsers(ModelAndView model) {
         try {
             logger.info("Fetching all users");
             List<UserEntity> users = userService.getAllUsers();
-            model.addAttribute("users", users);
-            return "users";
+            model.setViewName("users");
+            model.addObject("users",users);
+
+
+            return model; // Update the view template path
+        } catch (Exception e) {
+            logger.error("Error occurred while fetching users from the database", e);
+            throw new CustomException("Error occurred while fetching users from the database.");
+        }
+    }
+
+/*@GetMapping
+    public ModelAndView getAllCustomers() {
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("users");
+        mav.addObject("users", userService.getAllUsers());
+        return mav;
+    }*/
+
+
+
+
+    @GetMapping("/{id}")
+    public ModelAndView getUserById(ModelAndView model ,@PathVariable("id") Integer id) {
+        try {
+            logger.info("Fetching all users");
+            UserEntity user = userService.getUserById(id);
+            model.setViewName("users");
+            model.addObject("users",user);
+
+
+            return model; // Update the view template path
         } catch (Exception e) {
             logger.error("Error occurred while fetching users from the database", e);
             throw new CustomException("Error occurred while fetching users from the database.");
@@ -59,9 +87,7 @@ public class UserController {
     }
 
 
-
-
-    @GetMapping("/{id}")
+    /*@GetMapping("/{id}")
     public ResponseEntity<UserEntity> getUserById(@PathVariable("id") Integer id) {
         try {
             UserEntity user = userService.getUserById(id);
@@ -71,7 +97,7 @@ public class UserController {
             logger.error("Error occurred while fetching user from the database", e);
             throw new CustomException("Error occurred while fetching user by ID from the database.");
         }
-    }
+    }*/
 
 
     @PostMapping

@@ -3,14 +3,39 @@
 <head>
   <title>All Users</title>
 </head>
+
+<style>
+    table {
+     border: 1px solid black;
+
+    }
+
+    th, td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: lightgray;
+    }
+  </style>
+
 <body>
+
 <h1>All Users</h1>
 <table>
   <thead>
   <tr>
+    <h1>Table 1</h1></tr>
+  <tr>
     <th>ID</th>
     <th>Name</th>
     <th>Email</th>
+    <th>Phone Number</th>
+    <th>Age</th>
+    <th>Created-Time</th>
+    <th>Modified-Time</th>
   </tr>
   </thead>
   <tbody>
@@ -18,8 +43,40 @@
     <td th:text="${user.id}"></td>
     <td th:text="${user.name}"></td>
     <td th:text="${user.email}"></td>
+    <td th:text="${user.phone_number}"></td>
+    <td th:text="${user.age}"></td>
+    <td th:text="${user.created_on}"></td>
+    <td th:text="${user.modify_time}"></td>
   </tr>
   </tbody>
 </table>
+<table>
+  <thead>
+  <tr>
+    <h1>Table2 </h1></tr>
+  <tr>
+    <th>ID</th>
+    <th>city</th>
+    <th>country</th>
+    <th>Created-Time</th>
+    <th>Modified-Time</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="user : ${users}">
+    <td th:text="${user.UserEntity2.id}"></td>
+    <td th:text="${user.UserEntity2.city}"></td>
+    <td th:text="${user.UserEntity2.country}"></td>
+
+    <td th:text="${user.UserEntity2.created_on}"></td>
+    <td th:text="${user.UserEntity2.modify_time}"></td>
+  </tr>
+  </tbody>
+</table>
+<form action="/logout" method="post">
+  <button type="submit">Logout</button>
+</form>
+
 </body>
 </html>
+
