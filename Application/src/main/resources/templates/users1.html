@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>All Users</title>
+</head>
+
+<style>
+    table {
+     border: 1px solid black;
+
+    }
+
+    th, td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: lightgray;
+    }
+  </style>
+
+<body>
+
+<h1>All Users</h1>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>User Name</th>
+        <th>Password</th>
+
+        <th>Created-Time</th>
+        <th>Modified-Time</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users1}">
+        <td th:text="${user.id}"></td>
+        <td th:text="${user.username}"></td>
+        <td th:text="${user.password}"></td>
+        <td th:text="${user.created_on}"></td>
+        <td th:text="${user.modify_time}"></td>
+    </tr>
+    </tbody>
+</table>
+<form th:action="@{/logout}" method="post">
+    <button type="submit">Logout</button>
+</form>
+
+
+</body>
+</html>
+

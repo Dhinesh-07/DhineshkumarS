@@ -28,21 +28,6 @@ public class UserController {
 
     }
 
-
-
-  /*  @GetMapping
-    public ResponseEntity<List<UserEntity>> getAllUsers() {
-        try {
-            logger.info("Fetching all users");
-            List<UserEntity> users = userService.getAllUsers();
-            return ResponseEntity.ok(users);
-        } catch (Exception e) {
-            logger.error("Error occurred while fetching users from the database", e);
-            throw new CustomException("Error occurred while fetching users from the database.");
-        }
-    }*/
-
-
     @GetMapping
     public ModelAndView getAllUsers(ModelAndView model) {
         try {
@@ -58,16 +43,6 @@ public class UserController {
             throw new CustomException("Error occurred while fetching users from the database.");
         }
     }
-
-/*@GetMapping
-    public ModelAndView getAllCustomers() {
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("users");
-        mav.addObject("users", userService.getAllUsers());
-        return mav;
-    }*/
-
-
 
 
     @GetMapping("/{id}")
@@ -85,19 +60,26 @@ public class UserController {
             throw new CustomException("Error occurred while fetching users from the database.");
         }
     }
-
-
-    /*@GetMapping("/{id}")
-    public ResponseEntity<UserEntity> getUserById(@PathVariable("id") Integer id) {
+    @GetMapping("/enget")
+    public ModelAndView getUserData(ModelAndView model) {
         try {
-            UserEntity user = userService.getUserById(id);
-            logger.info("Fetching the user with ID: {}", id);
-            return ResponseEntity.ok(user);
+            List<UserEncrypt> userEncryptList = userService.getAllUserEncrypt();
+            for (UserEncrypt userEncrypt : userEncryptList){
+    userService.decryptUserEncrypt(userEncrypt);
+            }
+
+            logger.info("Fetching all users");
+            model.setViewName("users1");
+            model.addObject("users1",userEncryptList);
+
+            return model;
         } catch (Exception e) {
-            logger.error("Error occurred while fetching user from the database", e);
-            throw new CustomException("Error occurred while fetching user by ID from the database.");
+            logger.error("Error occurred while fetching users from the database", e);
+            throw new CustomException("Error occurred while fetching users from the database.");
         }
-    }*/
+    }
+
+
 
 
     @PostMapping
@@ -177,17 +159,6 @@ public class UserController {
         }
     }
 
-    @GetMapping("/enget")
-    public ResponseEntity<List<UserEncrypt>> getUserData() {
-        try {
-            List<UserEncrypt> userEncryptList = userService.getAllUserEncrypt();
-            logger.info("Fetching all users");
-            return ResponseEntity.ok(userEncryptList);
-        } catch (Exception e) {
-            logger.error("Error occurred while fetching users from the database", e);
-            throw new CustomException("Error occurred while fetching users from the database.");
-        }
-    }
 
 
 
