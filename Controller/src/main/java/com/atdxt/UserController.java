@@ -1,21 +1,27 @@
 package com.atdxt;
 
+import ch.qos.logback.core.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
 
 @RestController
+
 @Validated
-@RequestMapping(path="/users")
+@RequestMapping
 public class UserController {
 
     private final UserService userService;
@@ -28,7 +34,14 @@ public class UserController {
 
     }
 
-    @GetMapping
+    @GetMapping("/")
+    public ModelAndView firstpage(ModelAndView model){
+        model.setViewName("Home");
+        return model;
+
+    }
+
+    @GetMapping("/users")
     public ModelAndView getAllUsers(ModelAndView model) {
         try {
             logger.info("Fetching all users");
@@ -79,10 +92,21 @@ public class UserController {
         }
     }
 
+    @PostMapping("/addUser")
+    public String addUserFromForm(@ModelAttribute UserEntity user , ModelAndView model) {
+        try {
+
+            model.addObject("greeting", user);
+            return "Signup";
+        } catch (Exception e) {
+            logger.error("Error occurred while adding users from the form", e);
+            throw new CustomException("error while adding user via post");
+        }
+    }
 
 
 
-    @PostMapping
+  /*  @PostMapping("/addUser")
     public ResponseEntity<String> addUser(@RequestBody UserEntity user) {
         try {
             if (!userService.isValidEmail(user.getEmail())) {
@@ -115,11 +139,11 @@ public class UserController {
             throw new CustomException("Error occurred while adding users to the database.");
         }
     }
+*/
 
 
 
-
-    @PutMapping("/{id}")
+    @PutMapping("update/{id}")
     public ResponseEntity<String> updateUser(@PathVariable("id") Integer id, @RequestBody UserEntity user) {
         try {
             if (!userService.isValidEmail(user.getEmail())) {
@@ -163,7 +187,6 @@ public class UserController {
 
 
 
-
-
 }
+
 
