@@ -1,21 +1,110 @@
-<form action="/addUser" method="post">
-  <label for="name">Name:</label>
-  <input type="text" id="name" name="name" required><br>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-  <label for="email">Email:</label>
-  <input type="email" id="email" name="email" required><br>
+<head>
+  <meta charset="ISO-8859-1">
+  <title>User details Form</title>
+  <style>
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
 
-  <label for="age">Age:</label>
-  <input type="number" id="age" name="age" required><br>
+        h2 {
+            text-align: center;
+        }
 
-  <label for="phone_number">Phone Number:</label>
-  <input type="tel" id="phone_number" name="phone_number"><br>
+        .form-group {
+            margin-bottom: 15px;
+        }
 
-  <label for="city">City:</label>
-  <input type="text" id="city" name="city"><br>
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
 
-  <label for="country">Country:</label>
-  <input type="text" id="country" name="country"><br>
+        input[type="text"],
+        input[type="email"],
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
 
-  <input type="submit" value="Submit">
-</form>
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        a {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            color: #007bff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+  <h2>Add User</h2>
+
+  <form action="#" th:action="@{/addUser}" th:object="${addUser}" method="POST">
+
+    <div class="form-group">
+      <label for="name">Name:</label>
+      <input type="text" id="name" th:field="*{name}" placeholder="Enter name">
+
+      <span th:if="${errorname}" style="color: red"  th:text="${errorname}"></span>
+      <span th:if="${errornameexits}" style="color: red"  th:text="${errornameexits}"></span>
+    </div>
+
+
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <input type="email" id="email" th:field="*{email}" placeholder="Enter email">
+      <span th:if="${erroremail}" style="color: red"  th:text="${erroremail}"></span>
+      <span th:if="${erroremailexits}" style="color: red"  th:text="${erroremailexits}"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="age">Age:</label>
+      <input type="number" id="age" th:field="*{age}" placeholder="Enter age">
+    </div>
+
+    <div class="form-group">
+      <label for="phone">Phone Number:</label>
+      <input type="text" id="phone" th:field="*{phone_number}" placeholder="Enter phone number">
+      <span th:if="${errorphone}" style="color: red"  th:text="${errorphone}"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="city">City:</label>
+      <input type="text" id="city" th:field="*{userEntity2.city}" placeholder="Enter city">
+    </div>
+
+    <div class="form-group">
+      <label for="country">Country:</label>
+      <input type="text" id="country" th:field="*{userEntity2.country}" placeholder="Enter country">
+    </div>
+
+    <button type="submit">Save User</button>
+  </form>
+
+  <a th:href="@{/login}">Login</a>
+</div>
+</body>
+
+</html>

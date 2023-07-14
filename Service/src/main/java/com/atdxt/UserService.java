@@ -61,45 +61,50 @@ public class UserService {
         }
     }
 
-    public void addUser(UserEntity user) {
+    public void addUser(UserEntity addUser) {
         try {
             UserEntity newUser = new UserEntity();
-
-            if (isEmailExists(user.getEmail())) {
+            if (addUser.getName() == null || addUser.getName().isEmpty()) {
+                throw new IllegalArgumentException("Name is required");
+            }
+            if (isEmailExists(addUser.getEmail())) {
                 throw new IllegalArgumentException("Email already exists,change Email address");
             }
 
-            if (isNameExists(user.getName())) {
+            if (isNameExists(addUser.getName())) {
                 throw new IllegalArgumentException("Name already exists,Change Name ");
             }
 
 
 
-            if (!isValidEmail(user.getEmail())) {
+            if (!isValidEmail(addUser.getEmail())) {
                 throw new CustomException("Invalid email address");
             }
 
-            newUser.setName(user.getName());
-            newUser.setEmail(user.getEmail());
-            newUser.setAge(user.getAge());
+            newUser.setName(addUser.getName());
+            newUser.setEmail(addUser.getEmail());
+            newUser.setAge(addUser.getAge());
             newUser.setCreated_on(getCurrentDate());
             newUser.setModify_time(getCurrentDateTime());
 
-            if (user.getPhone_number() != null) {
+            if (addUser.getPhone_number() != null) {
 
-                if (!isValidPhoneNumber(user.getPhone_number())) {
+
+                if (!isValidPhoneNumber(addUser.getPhone_number())) {
                     throw new CustomException("Invalid phone number");
                 }
 
-                newUser.setPhone_number(user.getPhone_number());
-            }
 
+
+
+                newUser.setPhone_number(addUser.getPhone_number());
+            }
             userRepository.save(newUser);
 
-            if (user.getUserEntity2() != null) {
+            if (addUser.getUserEntity2() != null) {
                 UserEntity2 userEntity2 = new UserEntity2();
-                userEntity2.setCity(user.getUserEntity2().getCity());
-                userEntity2.setCountry(user.getUserEntity2().getCountry());
+                userEntity2.setCity(addUser.getUserEntity2().getCity());
+                userEntity2.setCountry(addUser.getUserEntity2().getCountry());
                 userEntity2.setCreated_on(getCurrentDate());
                 userEntity2.setModify_time(getCurrentDateTime());
 
@@ -140,6 +145,7 @@ public class UserService {
                     if (!isValidPhoneNumber(user.getPhone_number())) {
                         throw new CustomException("Invalid phone number");
                     }
+
 
                     existingUser.setPhone_number(user.getPhone_number());
                 }
@@ -199,8 +205,8 @@ public class UserService {
     public boolean isValidEmail(String email) {
         return email != null && email.matches("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}");
     }
-    public boolean isValidPhoneNumber(String phoneNumber) {
-        return phoneNumber != null && phoneNumber.matches("\\d{10}");
+    public boolean isValidPhoneNumber(String phone_number) {
+        return phone_number != null && phone_number.matches("\\d{10}");
     }
     public boolean isNameExists(String name) {
         return userRepository.existsByName(name);
@@ -210,8 +216,10 @@ public class UserService {
         return userRepository.existsByEmail(email);
     }
 
-
-
+  /*  public boolean isPhoneExists(String phone_number) {
+        return userRepository.existsByPhoneNumber(phone_number);
+    }
+*/
 
     public boolean isEmailExistsForOtherUser(String email, Integer id) {
         Optional<UserEntity> userOptional = userRepository.findByEmail(email);
@@ -221,6 +229,16 @@ public class UserService {
         }
         return false;
     }
+   /* public boolean isPhoneExistsForOtherUser(String phone_number, Integer id) {
+        Integer phoneNumber = Integer.parseInt(phone_number);
+        Optional<UserEntity> userOptional = userEntity2Repository.findByphone_number(phoneNumber);
+        if (userOptional.isPresent()) {
+            UserEntity existingUser = userOptional.get();
+            return !existingUser.getId().equals(id);
+        }
+        return false;
+    }*/
+
 
 
 

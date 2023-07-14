@@ -46,9 +46,8 @@ public class SecurityConfig {
         http
                 .authorizeRequests(authorize -> authorize
                         .requestMatchers("/").permitAll()
+                        .requestMatchers("/addUser").permitAll()
                         .requestMatchers("/login").permitAll()
-                        .requestMatchers("/signup").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/post").authenticated()
                         .anyRequest().authenticated()
                 )
                 .formLogin(formLogin ->formLogin

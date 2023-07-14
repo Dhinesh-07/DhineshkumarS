@@ -1,6 +1,6 @@
 package com.atdxt;
 
-import ch.qos.logback.core.model.Model;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
 
@@ -40,6 +42,7 @@ public class UserController {
         return model;
 
     }
+
 
     @GetMapping("/users")
     public ModelAndView getAllUsers(ModelAndView model) {
@@ -91,55 +94,76 @@ public class UserController {
             throw new CustomException("Error occurred while fetching users from the database.");
         }
     }
-
-    @PostMapping("/addUser")
-    public String addUserFromForm(@ModelAttribute UserEntity user , ModelAndView model) {
-        try {
-
-            model.addObject("greeting", user);
-            return "Signup";
-        } catch (Exception e) {
-            logger.error("Error occurred while adding users from the form", e);
-            throw new CustomException("error while adding user via post");
-        }
+    @GetMapping("/addUser")
+    public ModelAndView getRegister() {
+        ModelAndView modelAndView = new ModelAndView("addUser");
+        UserEntity addUser= new UserEntity();
+        modelAndView.addObject("addUser", addUser);
+        return modelAndView;
     }
 
 
 
-  /*  @PostMapping("/addUser")
-    public ResponseEntity<String> addUser(@RequestBody UserEntity user) {
+
+
+    @PostMapping("/addUser")
+    public RedirectView addUser(@ModelAttribute("addUser") UserEntity addUser, RedirectAttributes redirectAttributes) {
+        RedirectView redirectView = new RedirectView();
         try {
-            if (!userService.isValidEmail(user.getEmail())) {
-                throw new CustomException("Invalid email address");
+            if (addUser.getName() == null || addUser.getName().isEmpty()) {
+                redirectAttributes.addFlashAttribute("errorname", "Please enter your name!");
+                redirectView.setUrl("/addUser");
+                return redirectView;
             }
+            if (userService.isNameExists(addUser.getName())){
+                redirectAttributes.addFlashAttribute("errornameexits", "Name already exists!, Change the name");
+                redirectView.setUrl("/addUser");
+                return redirectView;
 
-            if (userService.isEmailExists(user.getEmail())) {
-                return ResponseEntity.badRequest().body("Email already exists,change Email address");
             }
-
-            if (userService.isNameExists(user.getName())) {
-                return ResponseEntity.badRequest().body("Name already exists,Change Name ");
+            if (addUser.getEmail() == null || addUser.getEmail().isEmpty()) {
+                redirectAttributes.addFlashAttribute("erroremail", "Please enter email!");
+                redirectView.setUrl("/addUser");
+                return redirectView;
             }
-
-            if (user.getPhone_number() != null) {
-                if (!userService.isValidPhoneNumber(user.getPhone_number())) {
-                    throw new CustomException("Invalid phone number");
+            if (userService.isEmailExists(addUser.getEmail())) {
+                redirectAttributes.addFlashAttribute("erroremailexits", "Email already exists!,change it");
+                redirectView.setUrl("/addUser");
+                return redirectView;
+            }
+                if (!userService.isValidEmail(addUser.getEmail())) {
+                    redirectAttributes.addFlashAttribute("erroremailinvalid", "Invalid email address!!!");
+                    redirectView.setUrl("/addUser");
+                    return redirectView;
                 }
 
 
+                if (addUser.getPhone_number() != null && !addUser.getPhone_number().isEmpty() ) {
+
+
+                if (!userService.isValidPhoneNumber(addUser.getPhone_number())) {
+                    redirectAttributes.addFlashAttribute("errorphone", "Invalid phone number!!!");
+                redirectView.setUrl("/addUser");
+                return redirectView;
             }
-            userService.addUser(user);
+
+
+        }
+
+            userService.addUser(addUser);
             logger.info("User added successfully");
-            return ResponseEntity.ok("User added successfully");
+
+            redirectView.setUrl("/login");
+            return redirectView;
+
         } catch (CustomException customEx) {
             logger.error("CustomException occurred while adding users to the database", customEx);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(customEx.getMessage());
+            throw new CustomException("Error occurred while adding users to the database.");
         } catch (Exception ex) {
             logger.error("Error occurred while adding users to the database", ex);
             throw new CustomException("Error occurred while adding users to the database.");
         }
     }
-*/
 
 
 

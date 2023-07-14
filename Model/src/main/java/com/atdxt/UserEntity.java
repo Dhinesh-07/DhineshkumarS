@@ -23,12 +23,10 @@ public class UserEntity {
     @Column(name = "id")
     private Integer id;
 
-    @NotBlank(message = "Name is required.")
     @Column(name = "name")
     private String name;
 
-    @NotBlank(message = "Email is required.")
-    @Email(message = "Invalid email format.")
+
     @Column(name = "email")
     private String email;
 
@@ -36,7 +34,7 @@ public class UserEntity {
     private Integer age;
 
 
-    @NotBlank(message = "no numbver")
+
     @Column(name = "phone_number")
     private String phone_number;
 
