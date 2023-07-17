@@ -63,24 +63,19 @@ public class UserService {
 
     public void addUser(UserEntity addUser) {
         try {
-            UserEntity newUser = new UserEntity();
             if (addUser.getName() == null || addUser.getName().isEmpty()) {
                 throw new IllegalArgumentException("Name is required");
             }
             if (isEmailExists(addUser.getEmail())) {
-                throw new IllegalArgumentException("Email already exists,change Email address");
+                throw new IllegalArgumentException("Email already exists, change email address");
             }
-
             if (isNameExists(addUser.getName())) {
-                throw new IllegalArgumentException("Name already exists,Change Name ");
+                throw new IllegalArgumentException("Name already exists, change name");
             }
-
-
-
             if (!isValidEmail(addUser.getEmail())) {
                 throw new CustomException("Invalid email address");
             }
-
+            UserEntity newUser = new UserEntity();
             newUser.setName(addUser.getName());
             newUser.setEmail(addUser.getEmail());
             newUser.setAge(addUser.getAge());
@@ -88,15 +83,9 @@ public class UserService {
             newUser.setModify_time(getCurrentDateTime());
 
             if (addUser.getPhone_number() != null) {
-
-
                 if (!isValidPhoneNumber(addUser.getPhone_number())) {
                     throw new CustomException("Invalid phone number");
                 }
-
-
-
-
                 newUser.setPhone_number(addUser.getPhone_number());
             }
             userRepository.save(newUser);
@@ -107,18 +96,27 @@ public class UserService {
                 userEntity2.setCountry(addUser.getUserEntity2().getCountry());
                 userEntity2.setCreated_on(getCurrentDate());
                 userEntity2.setModify_time(getCurrentDateTime());
-
                 userEntity2Repository.save(userEntity2);
                 newUser.setUserEntity2(userEntity2);
             }
 
+            UserEncrypt userEncrypt = new UserEncrypt();
+            userEncrypt.setUsername(addUser.getUserEncrypt().getUsername());
+            userEncrypt.setPassword(addUser.getUserEncrypt().getPassword());
+            userEncrypt.setConfirmpassword(addUser.getUserEncrypt().getConfirmpassword());
+            userEncrypt.encryptPassword();
+            userEncrypt.setCreated_on(getCurrentDate());
+            userEncrypt.setModify_time(getCurrentDateTime());
+            userEncryptRepository.save(userEncrypt);
+            newUser.setUserEncrypt(userEncrypt);
+
+            userRepository.save(newUser);
             logger.info("User added successfully");
         } catch (Exception e) {
             logger.error("Error occurred while adding users to the database", e);
             throw new CustomException("Error occurred while adding users to the database.");
         }
     }
-
 
 
 
@@ -180,10 +178,11 @@ public class UserService {
         return sdf.format(new Date());
     }
 
-    public void saveUserEncrypt(UserEncrypt userEncrypt) {
+   /* public void saveUserEncrypt(UserEncrypt userEncrypt) {
         try {
             userEncrypt.setUsername(userEncrypt.getUsername());
             userEncrypt.encryptPassword();
+            userEncrypt.encryptconfirmPassword();
             userEncrypt.setCreated_on(getCurrentDate());
             userEncrypt.setModify_time(getCurrentDateTime());
             userEncryptRepository.save(userEncrypt);
@@ -192,10 +191,11 @@ public class UserService {
             throw new CustomException("Error occurred while saving userEncrypt to the database.");
         }
     }
-
+*/
     public void decryptUserEncrypt(UserEncrypt userEncrypt) {
         try {
             userEncrypt.decryptPassword();
+//            userEncrypt.decryptconfirmPassword();
         } catch (Exception e) {
             logger.error("Error occurred while decrypting userEncrypt password", e);
             throw new CustomException("Error occurred while decrypting userEncrypt password.");

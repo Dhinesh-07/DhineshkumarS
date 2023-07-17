@@ -2,8 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <meta charset="ISO-8859-1">
-  <title>User details Form</title>
+  <meta charset="UTF-8">
+  <title>User Details Form</title>
   <style>
         .container {
             max-width: 400px;
@@ -63,47 +63,67 @@
 
   <form action="#" th:action="@{/addUser}" th:object="${addUser}" method="POST">
 
+<!--  <form action="/addUser" method="POST">-->
+
     <div class="form-group">
       <label for="name">Name:</label>
-      <input type="text" id="name" th:field="*{name}" placeholder="Enter name">
+      <input type="text" id="name" name="name"  th:field="*{name}" placeholder="Enter name" >
 
-      <span th:if="${errorname}" style="color: red"  th:text="${errorname}"></span>
-      <span th:if="${errornameexits}" style="color: red"  th:text="${errornameexits}"></span>
     </div>
-
 
     <div class="form-group">
       <label for="email">Email:</label>
-      <input type="email" id="email" th:field="*{email}" placeholder="Enter email">
-      <span th:if="${erroremail}" style="color: red"  th:text="${erroremail}"></span>
-      <span th:if="${erroremailexits}" style="color: red"  th:text="${erroremailexits}"></span>
+      <input type="email" id="email" name="email" th:field="*{email}" placeholder="Enter email" >
+
     </div>
 
     <div class="form-group">
       <label for="age">Age:</label>
-      <input type="number" id="age" th:field="*{age}" placeholder="Enter age">
+      <input type="number" id="age" name="age"  th:field="*{age}" placeholder="Enter age" >
     </div>
 
     <div class="form-group">
       <label for="phone">Phone Number:</label>
-      <input type="text" id="phone" th:field="*{phone_number}" placeholder="Enter phone number">
-      <span th:if="${errorphone}" style="color: red"  th:text="${errorphone}"></span>
+      <input type="text" id="phone" name="phone"  th:field="*{phone_number}" placeholder="Enter phone number">
+
     </div>
 
     <div class="form-group">
       <label for="city">City:</label>
-      <input type="text" id="city" th:field="*{userEntity2.city}" placeholder="Enter city">
+      <input type="text" id="city" name="city"  th:field="*{userEntity2.city}" placeholder="Enter city">
     </div>
 
     <div class="form-group">
       <label for="country">Country:</label>
-      <input type="text" id="country" th:field="*{userEntity2.country}" placeholder="Enter country">
+      <input type="text" id="country" name="country"  th:field="*{userEntity2.country}" placeholder="Enter country">
+    </div>
+
+    <div class="form-group">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username"  th:field="*{userEncrypt.username}" placeholder="Enter username" >
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password"  th:field="*{userEncrypt.password}" placeholder="Enter password" >
+    </div>
+
+      <!--<div class="form-group">
+          <label for="confirmPassword">Confirm Password:</label>
+          <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm password"  th:field="*{userEncrypt.confirmPassword}" >
+      </div>-->
+
+
+
+      <div th:if="${errorMessage}" >
+      <p th:text="${errorMessage}"></p>
     </div>
 
     <button type="submit">Save User</button>
   </form>
 
-  <a th:href="@{/login}">Login</a>
+  <a href="/login">Login</a>
+
 </div>
 </body>
 

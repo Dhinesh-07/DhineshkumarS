@@ -6,9 +6,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.*;
 
 
 @Entity
@@ -36,6 +34,8 @@ public class UserEntity {
 
 
     @Column(name = "phone_number")
+    @Size(min=5 ,max = 10)
+    @NotEmpty(message = "User's name cannot be empty.")
     private String phone_number;
 
     @Column(name = "created_on")
@@ -47,9 +47,18 @@ public class UserEntity {
 
     public UserEntity(){
     }
+
+
+
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnoreProperties("user")
     UserEntity2 userEntity2;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("user")
+    UserEncrypt userEncrypt;
+
+
 
 
 }

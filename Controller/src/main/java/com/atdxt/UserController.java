@@ -5,17 +5,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
 
@@ -49,8 +43,12 @@ public class UserController {
         try {
             logger.info("Fetching all users");
             List<UserEntity> users = userService.getAllUsers();
-            model.setViewName("users");
-            model.addObject("users",users);
+            for (UserEntity user :users) {
+                UserEncrypt userEncrypt = user.getUserEncrypt();
+                userService.decryptUserEncrypt(userEncrypt);
+            }
+                model.setViewName("users");
+                model.addObject("users", users);
 
 
             return model; // Update the view template path
@@ -102,10 +100,7 @@ public class UserController {
         return modelAndView;
     }
 
-
-
-
-
+/*
     @PostMapping("/addUser")
     public RedirectView addUser(@ModelAttribute("addUser") UserEntity addUser, RedirectAttributes redirectAttributes) {
         RedirectView redirectView = new RedirectView();
@@ -131,24 +126,25 @@ public class UserController {
                 redirectView.setUrl("/addUser");
                 return redirectView;
             }
-                if (!userService.isValidEmail(addUser.getEmail())) {
-                    redirectAttributes.addFlashAttribute("erroremailinvalid", "Invalid email address!!!");
-                    redirectView.setUrl("/addUser");
-                    return redirectView;
-                }
-
-
-                if (addUser.getPhone_number() != null && !addUser.getPhone_number().isEmpty() ) {
-
-
-                if (!userService.isValidPhoneNumber(addUser.getPhone_number())) {
-                    redirectAttributes.addFlashAttribute("errorphone", "Invalid phone number!!!");
+            if (!userService.isValidEmail(addUser.getEmail())) {
+                redirectAttributes.addFlashAttribute("erroremailinvalid", "Invalid email address!!!");
                 redirectView.setUrl("/addUser");
                 return redirectView;
             }
 
 
-        }
+            if (addUser.getPhone_number() != null && !addUser.getPhone_number().isEmpty() ) {
+
+
+                if (!userService.isValidPhoneNumber(addUser.getPhone_number())) {
+                    redirectAttributes.addFlashAttribute("errorphone", "Invalid phone number!!!");
+                    redirectView.setUrl("/addUser");
+                    return redirectView;
+                }
+
+
+            }
+
 
             userService.addUser(addUser);
             logger.info("User added successfully");
@@ -164,7 +160,78 @@ public class UserController {
             throw new CustomException("Error occurred while adding users to the database.");
         }
     }
+*/
 
+
+    @PostMapping("/addUser")
+    public ModelAndView addUser(@ModelAttribute("addUser") UserEntity addUser, RedirectAttributes redirectAttributes) {
+
+        try {
+            ModelAndView modelAndView = new ModelAndView();
+
+            if (addUser.getName() == null || addUser.getName().isEmpty()) {
+
+                    String errorname="Please enter your name!";
+    modelAndView.addObject("errorMessage",errorname);
+
+            }
+            if (userService.isNameExists(addUser.getName())){
+                String errornameexits="Name already exists!, Change the name";
+                modelAndView.addObject("errorMessage",errornameexits);
+
+            }
+            if (addUser.getEmail() == null || addUser.getEmail().isEmpty()) {
+                String erroremail="Email already exists!,change it";
+                modelAndView.addObject("errorMessage",erroremail);
+
+
+            }
+            if (userService.isEmailExists(addUser.getEmail())) {
+                String erroremailexits = "Email already exists!,change it";
+
+                modelAndView.addObject("errorMessage",erroremailexits);
+
+            }
+            if (!userService.isValidEmail(addUser.getEmail())) {
+                String erroremailinvalid = "Invalid email address!!!";
+                modelAndView.addObject("errorMessage",erroremailinvalid);
+
+
+
+            }
+
+/*
+
+            if (addUser.getPhone_number() != null && !addUser.getPhone_number().isEmpty() ) {
+
+
+                if (!userService.isValidPhoneNumber(addUser.getPhone_number())) {
+                    redirectAttributes.addFlashAttribute("errorphone", "Invalid phone number!!!");
+                    redirectView.setUrl("/addUser");
+                    return redirectView;
+                }
+
+
+            }
+*/
+
+
+            userService.addUser(addUser);
+            logger.info("User added successfully");
+            modelAndView.addObject("addUser", addUser);
+            modelAndView.setViewName("signupSuccess");
+            return modelAndView;
+
+
+        }
+        catch (CustomException customEx) {
+            logger.error("CustomException occurred while adding users to the database", customEx);
+            throw new CustomException("Error occurred while adding users to the database.");
+        } catch (Exception ex) {
+            logger.error("Error occurred while adding users to the database", ex);
+            throw new CustomException("Error occurred while adding users to the database.");
+        }
+    }
 
 
     @PutMapping("update/{id}")
@@ -195,7 +262,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/enpost")
+   /* @PostMapping("/enpost")
     public ResponseEntity<String> createUser(@RequestBody UserEncrypt userEncrypt) {
         try {
             userService.saveUserEncrypt(userEncrypt);
@@ -205,7 +272,7 @@ public class UserController {
             logger.error("Error occurred while adding user to the database", e);
             throw new CustomException("Error occurred while adding user to the database.");
         }
-    }
+    }*/
 
 
 
