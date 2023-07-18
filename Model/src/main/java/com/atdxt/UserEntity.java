@@ -35,7 +35,6 @@ public class UserEntity {
 
     @Column(name = "phone_number")
     @Size(min=5 ,max = 10)
-    @NotEmpty(message = "User's name cannot be empty.")
     private String phone_number;
 
     @Column(name = "created_on")

@@ -63,6 +63,7 @@ public class UserService {
 
     public void addUser(UserEntity addUser) {
         try {
+
             if (addUser.getName() == null || addUser.getName().isEmpty()) {
                 throw new IllegalArgumentException("Name is required");
             }
@@ -86,6 +87,7 @@ public class UserService {
                 if (!isValidPhoneNumber(addUser.getPhone_number())) {
                     throw new CustomException("Invalid phone number");
                 }
+
                 newUser.setPhone_number(addUser.getPhone_number());
             }
             userRepository.save(newUser);
@@ -208,6 +210,9 @@ public class UserService {
     public boolean isValidPhoneNumber(String phone_number) {
         return phone_number != null && phone_number.matches("\\d{10}");
     }
+
+
+
     public boolean isNameExists(String name) {
         return userRepository.existsByName(name);
     }
@@ -216,10 +221,7 @@ public class UserService {
         return userRepository.existsByEmail(email);
     }
 
-  /*  public boolean isPhoneExists(String phone_number) {
-        return userRepository.existsByPhoneNumber(phone_number);
-    }
-*/
+
 
     public boolean isEmailExistsForOtherUser(String email, Integer id) {
         Optional<UserEntity> userOptional = userRepository.findByEmail(email);
@@ -229,18 +231,6 @@ public class UserService {
         }
         return false;
     }
-   /* public boolean isPhoneExistsForOtherUser(String phone_number, Integer id) {
-        Integer phoneNumber = Integer.parseInt(phone_number);
-        Optional<UserEntity> userOptional = userEntity2Repository.findByphone_number(phoneNumber);
-        if (userOptional.isPresent()) {
-            UserEntity existingUser = userOptional.get();
-            return !existingUser.getId().equals(id);
-        }
-        return false;
-    }*/
-
-
-
 
 
 }

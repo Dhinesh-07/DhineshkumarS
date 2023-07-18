@@ -164,7 +164,7 @@ public class UserController {
 
 
     @PostMapping("/addUser")
-    public ModelAndView addUser(@ModelAttribute("addUser") UserEntity addUser, RedirectAttributes redirectAttributes) {
+    public ModelAndView addUser(@ModelAttribute("addUser") UserEntity addUser) {
 
         try {
             ModelAndView modelAndView = new ModelAndView();
@@ -172,54 +172,60 @@ public class UserController {
             if (addUser.getName() == null || addUser.getName().isEmpty()) {
 
                     String errorname="Please enter your name!";
-    modelAndView.addObject("errorMessage",errorname);
-
+    modelAndView.addObject("errorname",errorname);
+                modelAndView.setViewName("addUser");
+                return modelAndView;
             }
             if (userService.isNameExists(addUser.getName())){
                 String errornameexits="Name already exists!, Change the name";
-                modelAndView.addObject("errorMessage",errornameexits);
-
+                modelAndView.addObject("errornameexits",errornameexits);
+                modelAndView.setViewName("addUser");
+                return modelAndView;
             }
             if (addUser.getEmail() == null || addUser.getEmail().isEmpty()) {
-                String erroremail="Email already exists!,change it";
-                modelAndView.addObject("errorMessage",erroremail);
-
+                String erroremail="Please enter your email!";
+                modelAndView.addObject("erroremail",erroremail);
+                modelAndView.setViewName("addUser");
+                return modelAndView;
 
             }
             if (userService.isEmailExists(addUser.getEmail())) {
                 String erroremailexits = "Email already exists!,change it";
 
-                modelAndView.addObject("errorMessage",erroremailexits);
-
+                modelAndView.addObject("erroremailexits",erroremailexits);
+                modelAndView.setViewName("addUser");
+                return modelAndView;
             }
             if (!userService.isValidEmail(addUser.getEmail())) {
                 String erroremailinvalid = "Invalid email address!!!";
-                modelAndView.addObject("errorMessage",erroremailinvalid);
-
+                modelAndView.addObject("erroremailinvalid",erroremailinvalid);
+                modelAndView.setViewName("addUser");
+                return modelAndView;
 
 
             }
 
-/*
 
             if (addUser.getPhone_number() != null && !addUser.getPhone_number().isEmpty() ) {
 
 
                 if (!userService.isValidPhoneNumber(addUser.getPhone_number())) {
-                    redirectAttributes.addFlashAttribute("errorphone", "Invalid phone number!!!");
-                    redirectView.setUrl("/addUser");
-                    return redirectView;
+                    String errorphone = "Invalid phone number!!!";
+
+                    modelAndView.addObject("errorphone",errorphone);
+                    modelAndView.setViewName("addUser");
+                    return modelAndView;
+
                 }
 
 
             }
-*/
 
 
             userService.addUser(addUser);
             logger.info("User added successfully");
             modelAndView.addObject("addUser", addUser);
-            modelAndView.setViewName("signupSuccess");
+            modelAndView.setViewName("Home");
             return modelAndView;
 
 
