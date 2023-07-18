@@ -4,6 +4,7 @@ import org.apache.catalina.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -14,6 +15,8 @@ import java.util.Optional;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+
+
     private final UserEntity2Repository userEntity2Repository;
     private final UserEncryptRepository userEncryptRepository;
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
@@ -180,11 +183,11 @@ public class UserService {
         return sdf.format(new Date());
     }
 
-   /* public void saveUserEncrypt(UserEncrypt userEncrypt) {
+ public void saveUserEncrypt(UserEncrypt userEncrypt) {
         try {
             userEncrypt.setUsername(userEncrypt.getUsername());
             userEncrypt.encryptPassword();
-            userEncrypt.encryptconfirmPassword();
+//            userEncrypt.encryptconfirmPassword();
             userEncrypt.setCreated_on(getCurrentDate());
             userEncrypt.setModify_time(getCurrentDateTime());
             userEncryptRepository.save(userEncrypt);
@@ -193,16 +196,16 @@ public class UserService {
             throw new CustomException("Error occurred while saving userEncrypt to the database.");
         }
     }
-*/
-    public void decryptUserEncrypt(UserEncrypt userEncrypt) {
+
+    /*public void decryptUserEncrypt(UserEncrypt userEncrypt) {
         try {
             userEncrypt.decryptPassword();
-//            userEncrypt.decryptconfirmPassword();
+
         } catch (Exception e) {
             logger.error("Error occurred while decrypting userEncrypt password", e);
             throw new CustomException("Error occurred while decrypting userEncrypt password.");
         }
-    }
+    }*/
 
     public boolean isValidEmail(String email) {
         return email != null && email.matches("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}");

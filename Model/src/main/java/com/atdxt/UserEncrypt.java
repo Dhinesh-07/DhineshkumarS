@@ -1,9 +1,14 @@
 package com.atdxt;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.Base64;
 
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.util.Base64;
 
 @Entity
 @Table(name = "dhinesh_demo3")
@@ -23,42 +28,23 @@ public class UserEncrypt {
     @Column(nullable = false)
     private String confirmpassword;
 
-
     @Column(name = "created_on")
     private String created_on;
 
     @Column(name = "modify_time")
     private String modify_time;
 
-
-
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id")
     private UserEntity user;
 
-
-
     public void encryptPassword() {
-        this.password = Base64.getEncoder().encodeToString(this.password.getBytes());
-        this.confirmpassword=Base64.getEncoder().encodeToString(this.confirmpassword.getBytes());
-
-    }
-
-    public void decryptPassword() {
-        this.password = new String(Base64.getDecoder().decode(this.password));
-        this.confirmpassword=new String(Base64.getDecoder().decode(this.confirmpassword));
-    }
-
-
-   /* public void encryptconfirmPassword() {
-        this.confirmpassword=Base64.getEncoder().encodeToString(this.confirmpassword.getBytes());
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        this.password = passwordEncoder.encode(this.password);
+        this.confirmpassword = passwordEncoder.encode(this.confirmpassword);
     }
 
 
 
-    public void decryptconfirmPassword() {
-        this.password=new String(Base64.getDecoder().decode(this.confirmpassword));
-    }
-*/
 
 }

@@ -45,7 +45,7 @@ public class UserController {
             List<UserEntity> users = userService.getAllUsers();
             for (UserEntity user :users) {
                 UserEncrypt userEncrypt = user.getUserEncrypt();
-                userService.decryptUserEncrypt(userEncrypt);
+//                userService.decryptUserEncrypt(userEncrypt);
             }
                 model.setViewName("users");
                 model.addObject("users", users);
@@ -59,7 +59,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/{id}")
+    @GetMapping("/users/{id}")
     public ModelAndView getUserById(ModelAndView model ,@PathVariable("id") Integer id) {
         try {
             logger.info("Fetching all users");
@@ -74,7 +74,7 @@ public class UserController {
             throw new CustomException("Error occurred while fetching users from the database.");
         }
     }
-    @GetMapping("/enget")
+    /*@GetMapping("/enget")
     public ModelAndView getUserData(ModelAndView model) {
         try {
             List<UserEncrypt> userEncryptList = userService.getAllUserEncrypt();
@@ -91,7 +91,7 @@ public class UserController {
             logger.error("Error occurred while fetching users from the database", e);
             throw new CustomException("Error occurred while fetching users from the database.");
         }
-    }
+    }*/
     @GetMapping("/addUser")
     public ModelAndView getRegister() {
         ModelAndView modelAndView = new ModelAndView("addUser");
