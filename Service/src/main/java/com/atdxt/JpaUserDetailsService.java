@@ -26,7 +26,6 @@ public class JpaUserDetailsService implements UserDetailsService {
 
         return User.withUsername(username)
                 .password(password)
-                .roles("ADMIN")
                 .build();
     }
 }

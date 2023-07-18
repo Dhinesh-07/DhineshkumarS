@@ -235,5 +235,15 @@ public class UserService {
         return false;
     }
 
+    public UserEncrypt getUserByUsername(String username) {
+        System.out.println("Getting user details for username: " + username);
+
+        System.out.println("User details retrieved: " + userEncryptRepository.findByUsername(username)
+                .orElse(null));
+        return userEncryptRepository.findByUsername(username)
+                .orElse(null);
+    }
+
+
 
 }
