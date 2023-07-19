@@ -42,9 +42,16 @@ The project consists of the following modules and directories:
                     - atdxt
                         - BoxApplication.java
                         - ServletInitializer.java
-            - resources
+            - **resources**
+                - application-dev.properties
+                - application-prod.properties
                 - application.properties
                 - log4j2.xml
+                - templates
+                    - addUser.html
+                    - Home.html
+                    - users1.html
+                    - users.html
 
 - **Controller**
     - pom.xml
@@ -53,10 +60,26 @@ The project consists of the following modules and directories:
             - java
                 - com
                     - atdxt
+                        - SecurityConfig.java
                         - UserController.java
+            - resources
 
 - **Data_Module**
     - dhinesh_db.sql
+    - dknew.sql
+
+- **Dockerfile**
+
+- **Exception**
+    - pom.xml
+    - src
+        - main
+            - java
+                - com
+                    - atdxt
+                        - CustomException.java
+        - test
+            - java
 
 - **Model**
     - pom.xml
@@ -65,7 +88,12 @@ The project consists of the following modules and directories:
             - java
                 - com
                     - atdxt
+                        - UserEncrypt.java
+                        - UserEntity2.java
                         - UserEntity.java
+
+- **pom.xml**
+- **README.md**
 
 - **Repository**
     - pom.xml
@@ -74,10 +102,23 @@ The project consists of the following modules and directories:
             - java
                 - com
                     - atdxt
+                        - UserEncryptRepository.java
+                        - UserEntity2Repository.java
                         - UserRepository.java
 
-- **pom.xml**
-- **README.md**
+- **Service**
+    - pom.xml
+    - src
+        - main
+            - java
+                - com
+                    - atdxt
+                        - JpaUserDetailsService.java
+                        - UserService.java
+            - resources
+        - test
+            - java
+
 
 ## Installation
 
