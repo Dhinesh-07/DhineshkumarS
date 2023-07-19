@@ -117,20 +117,38 @@
         <div class="form-group">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" th:field="*{userEncrypt.username}" placeholder="Enter username">
+            <div th:if="${errorusername}"  class="error" >
+                <p th:text="${errorusername}"></p>
+                <div th:if="${errorusernameexists}"  class="error" >
+                    <p th:text="${errorusernameexists}"></p>
+                </div>
         </div>
 
         <div class="form-group">
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" th:field="*{userEncrypt.password}" placeholder="Enter password">
+            <div th:if="${Passwordempty}" class="error"  >
+                <p th:text="${Passwordempty}"></p>
+            </div>
+
         </div>
 
         <div class="form-group">
             <label for="confirmpassword">Confirm Password:</label>
             <input type="password" id="confirmpassword" name="confirmpassword" placeholder="Confirm password" th:field="*{userEncrypt.confirmpassword}">
+
+            <div th:if="${confirmPasswordempty}" class="error"  >
+                <p th:text="${confirmPasswordempty}"></p>
+            </div>
+            <div th:if="${passwordnotmatch}" class="error"  >
+                <p th:text="${passwordnotmatch}"></p>
+            </div>
         </div>
 
         <div th:if="${errorMessage}">
             <p th:text="${errorMessage}"></p>
+
+        </div>
         </div>
 
         <button type="submit">Save User</button>

@@ -14,6 +14,8 @@
 
     <artifactId>Application</artifactId>
 <packaging>war</packaging>
+
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -98,6 +100,21 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <skip>false</skip>
+                    <profiles>
+                        <profile>
+                            <id>dev</id>
+                            <properties>
+                                <spring.profiles.active>dev</spring.profiles.active>
+                            </properties>
+                        </profile>
+                        <profile>
+                            <id>prod</id>
+                            <properties>
+                                <spring.profiles.active>prod</spring.profiles.active>
+                            </properties>
+                        </profile>
+                    </profiles>
+
                 </configuration>
             </plugin>
         </plugins>

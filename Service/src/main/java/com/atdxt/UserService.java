@@ -91,8 +91,12 @@ public class UserService {
                     throw new CustomException("Invalid phone number");
                 }
 
-                newUser.setPhone_number(addUser.getPhone_number());
+                    newUser.setPhone_number(addUser.getPhone_number());
+
+
+
             }
+
             userRepository.save(newUser);
 
             if (addUser.getUserEntity2() != null) {
@@ -106,7 +110,22 @@ public class UserService {
             }
 
             UserEncrypt userEncrypt = new UserEncrypt();
+            if (isUserNameExists(addUser.getUserEncrypt().getUsername())) {
+                throw new IllegalArgumentException("userName already exists, change email address");
+            }
+
             userEncrypt.setUsername(addUser.getUserEncrypt().getUsername());
+
+            if (addUser.getUserEncrypt().getPassword() ==null){
+                throw new IllegalArgumentException("Password must not be empty.");
+            }
+            if (addUser.getUserEncrypt().getConfirmpassword() ==null){
+                throw new IllegalArgumentException("confirm");
+            }
+            if (!addUser.getUserEncrypt().getConfirmpassword().equals(addUser.getUserEncrypt().getPassword())) {
+                throw new IllegalArgumentException("Password and Confirm Password do not match.");
+            }
+
             userEncrypt.setPassword(addUser.getUserEncrypt().getPassword());
             userEncrypt.setConfirmpassword(addUser.getUserEncrypt().getConfirmpassword());
             userEncrypt.encryptPassword();
@@ -197,16 +216,6 @@ public class UserService {
         }
     }
 
-    /*public void decryptUserEncrypt(UserEncrypt userEncrypt) {
-        try {
-            userEncrypt.decryptPassword();
-
-        } catch (Exception e) {
-            logger.error("Error occurred while decrypting userEncrypt password", e);
-            throw new CustomException("Error occurred while decrypting userEncrypt password.");
-        }
-    }*/
-
     public boolean isValidEmail(String email) {
         return email != null && email.matches("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}");
     }
@@ -223,8 +232,9 @@ public class UserService {
     public boolean isEmailExists(String email) {
         return userRepository.existsByEmail(email);
     }
-
-
+    public boolean isUserNameExists(String email) {
+        return userEncryptRepository.existsByUserName(email);
+    }
 
     public boolean isEmailExistsForOtherUser(String email, Integer id) {
         Optional<UserEntity> userOptional = userRepository.findByEmail(email);
@@ -243,6 +253,11 @@ public class UserService {
         return userEncryptRepository.findByUsername(username)
                 .orElse(null);
     }
+
+    public boolean isPasswordConfirmed(String password, String confirm_password) {
+        return password != null && confirm_password != null && password.equals(confirm_password);
+    }
+
 
 
 

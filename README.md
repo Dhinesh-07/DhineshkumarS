@@ -8,10 +8,12 @@ This project contains a multimodule application built using Spring MVC framework
 - [Requirements](#requirements)
 - [Project Structure](#project-structure)
 - [Installation](#installation)
-- [Project Usage Instructions](#project-usage-instructions)
-- [Database Connection Details](#database-connection-details)
--  [Docker](#docker)
+- [Building the Application](#building-the-application)
+- [AWS Details](#aws-details)
+- [Docker Details](#docker-details)
 - [Commands To Remember](#commands-to-remember)
+
+
 
 ## Introduction
 
@@ -117,72 +119,35 @@ Step 5:Build and Run the Project
 - Navigate to the project directory and clean and build the project using the command: mvn clean install.
 - Then, start running the project by executing:
 
-      mvn spring-boot:run.
+ 
+## Building the Application
+
+**Development**
+
+_For development the local mysql database was connected_
+
+To build the application for development, use the following command:
+
+    mvn clean install -Pdev
+
+To run the application in development mode, use the following command:
+
+    mvn spring-boot:run -Dspring-boot.run.profiles=dev
+
+**Production**
+
+    _For Production the RDS mysql database was connected_
 
 
-## Project Usage Instructions
+To build the application for production, use the following command:
 
-**Locally**
+    mvn clean install -Pprod
 
-- After following the previous setup steps, the project will be running locally on localhost:8080.
-- To retrieve all data from the project, execute the following command in your terminal:
+To run the application in production mode, use the following command:
 
-      curl http://localhost:8080/all
-
-To add new data to the project, use the following command:
-
-      curl -X POST -H "Content-Type: application/json" -d '{"name":"","email":""}' http://localhost:8080/add
+    mvn spring-boot:run -Dspring-boot.run.profiles=prod
 
 
-
-**On AWS Server**
-- you can access the project using the following URL: http://ec2-13-48-193-15.eu-north-1.compute.amazonaws.com:8080
-
-- Access the project on the AWS server using the following URL:
-
-
-**For Two table**
-
-**Get**
-
-- To retrieve all data from the project, you can send an HTTP GET request to the server using the following command:
-
-      curl http://ec2-13-48-193-15.eu-north-1.compute.amazonaws.com:8080/users
-
-- The response will be a JSON array containing the retrieved data. Here's an example output:
-
-[{"id":1,"name":"","email":""},{"id":2,"name":"dk","email":"kumar"},{"id":3,"name":"dhinesh","email":"dhinesh@gmail.com"},{"id":4,"name":"kumar","email":"kumar@gmail.com"}]
-
-**Post**
-
-- If you want to add new data to the project on the server, you can send an HTTP POST request with the required data in the request body. Use the following command:
-
-- For old api        
-
-      curl -X POST -H "Content-Type: application/json" -d '{"name":"dDhinesh","email":"dhineshk@gmail.com","userEntity2":{"city":"chennai","country":"uk"}}' http://localhost:8080/users
-
-- For new apo
-
-      curl -X POST -H "Content-Type: application/json" -d '{"name":"john","email":"john@gmail.com","phone_number":"789456120","age":"12","userEntity2":{"city":"chennai","country":"uk"}}' http://ec2-13-48-193-15.eu-north-1.compute.amazonaws.com:8080/users
-
-  - Upon successful addition of the data, the server will respond with the message
-             
-        "Saved Successfully."
-
-**PUT**
-
-     curl -X PUT -H "Content-Type:application/json" -d '{"name":"dinesh","email":"dhineshk@gmail.com","userEntity2":{"city":"cuddalore","country":"uk"}}' http://localhost:8080/users/5
-
-
-**For Base 64**
-
-**Get**
-
-    curl http://localhost:8080/users/enget
-
-**Post**
-
-    curl -X POST -H "Content-Type: application/json" -d '{"username":"DK","password":"dhinesh@2"}' http://localhost:8080/users/enpost
 
 ## AWS Details
 
@@ -203,14 +168,9 @@ To add new data to the project, use the following command:
 
       mysql -h mydbinstance.crezjjaofuyj.eu-north-1.rds.amazonaws.com -P 3306 -u dhinesh -p
 
-
-## Docker Details 
+## Docker Details
 
 **docker user name= dhineshdk07**
-
-
-
-
 
 
 
@@ -241,3 +201,5 @@ Use the scp command to copy the file to the EC2 instance:
 **Importing to rds**
 
     mysql -h mydbinstance.crezjjaofuyj.eu-north-1.rds.amazonaws.com -u dhinesh -p loggingmodule < Data_Module/dhines_db.sql
+
+

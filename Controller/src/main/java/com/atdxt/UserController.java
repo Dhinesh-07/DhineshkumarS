@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -76,6 +78,9 @@ public class UserController {
         }
     }
 
+   
+
+
 
 
     @GetMapping("/addUser")
@@ -144,13 +149,49 @@ public class UserController {
 
 
             }
+            if (addUser.getUserEncrypt().getUsername() == null || addUser.getUserEncrypt().getUsername().isEmpty()) {
+                String errorusername = "Please enter your username!";
+                modelAndView.addObject("errorusername", errorusername);
+                modelAndView.setViewName("addUser");
+                return modelAndView;
+            }
+
+
+            if (userService.isUserNameExists(addUser.getUserEncrypt().getUsername())) {
+                String errorusernameexists = "UserName already exists!,change it";
+
+                modelAndView.addObject("errorusernameexists",errorusernameexists);
+                modelAndView.setViewName("addUser");
+                return modelAndView;
+            }
+            if (addUser.getUserEncrypt().getPassword() == null || addUser.getUserEncrypt().getPassword().isEmpty()) {
+                String Passwordempty = "Password must not be empty.";
+                modelAndView.addObject("Passwordempty", Passwordempty);
+                modelAndView.setViewName("addUser");
+                return modelAndView;
+            }
+
+            if (addUser.getUserEncrypt().getConfirmpassword() == null || addUser.getUserEncrypt().getConfirmpassword().isEmpty()) {
+                String confirmPasswordempty = "Confirm Password must not be empty.";
+                modelAndView.addObject("confirmPasswordempty", confirmPasswordempty);
+                modelAndView.setViewName("addUser");
+                return modelAndView;
+            }
+
+            if (!addUser.getUserEncrypt().getConfirmpassword().equals(addUser.getUserEncrypt().getPassword())) {
+                String passwordnotmatch = "Password and Confirm Password do not match.";
+                modelAndView.addObject("passwordnotmatch", passwordnotmatch);
+                modelAndView.setViewName("addUser");
+                return modelAndView;
+            }
+
 
 
             userService.addUser(addUser);
             logger.info("User added successfully");
             modelAndView.addObject("addUser", addUser);
-            modelAndView.setViewName("Home");
-            return modelAndView;
+            return new ModelAndView("redirect:/");
+
 
 
         }

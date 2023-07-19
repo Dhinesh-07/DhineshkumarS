@@ -10,6 +10,6 @@ import java.util.Optional;
 
 public interface UserEncryptRepository extends JpaRepository<UserEncrypt, Integer> {
 
-
+    boolean existsByUserName(String username);
     Optional<UserEncrypt> findByUsername(String username);
 }
