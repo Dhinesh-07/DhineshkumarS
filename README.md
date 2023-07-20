@@ -163,6 +163,13 @@ Step 5:Build and Run the Project
  
 ## Building the Application
 
+_Admin credential for both development and production_
+
+
+    Username:admin
+    Password:123
+
+
 **Development**
 
 _For development the local mysql database was connected_
