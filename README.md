@@ -184,7 +184,7 @@ To run the application in development mode, use the following command:
 
 **Production**
 
-    _For Production the RDS mysql database was connected_
+_For Production the RDS mysql database was connected_
 
 
 To build the application for production, use the following command:

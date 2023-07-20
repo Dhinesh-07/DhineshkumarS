@@ -1,12 +1,20 @@
 package com.atdxt;
 
-import org.apache.catalina.User;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
+import software.amazon.awssdk.services.s3.model.S3Exception;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.regions.Region;
+
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -15,7 +23,7 @@ import java.util.Optional;
 @Service
 public class UserService {
     private final UserRepository userRepository;
-
+    private final S3Client s3Client;
 
     private final UserEntity2Repository userEntity2Repository;
     private final UserEncryptRepository userEncryptRepository;
@@ -26,9 +34,10 @@ public class UserService {
         this.userRepository = userRepository;
         this.userEntity2Repository = userEntity2Repository;
         this.userEncryptRepository = userEncryptRepository;
+        this.s3Client = S3Client.builder().region(Region.US_EAST_1).build();
     }
 
-    public List<UserEntity> getAllUsers() {
+        public List<UserEntity> getAllUsers() {
         try {
             logger.info("Fetching all users");
             return userRepository.findAll();
@@ -258,7 +267,25 @@ public class UserService {
         return password != null && confirm_password != null && password.equals(confirm_password);
     }
 
+    public String uploadImageToS3(MultipartFile image) throws IOException {
+        try {
+            String bucketName = "localmysql-s3"; // Replace with your S3 bucket name
+            String key = "images/" + image.getOriginalFilename();
+            PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(key)
+                    .contentType(image.getContentType())
+                    .acl(ObjectCannedACL.PUBLIC_READ) // Optional: Make the uploaded image publicly readable
+                    .build();
+            s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(image.getInputStream(), image.getSize()));
 
+            return "https://your-s3-bucket.s3.amazonaws.com/" + key;
+        } catch (S3Exception e) {
+            e.printStackTrace();
+            // Handle the exception accordingly
+            throw e;
+        }
+    }
 
 
 }

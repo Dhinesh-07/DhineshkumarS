@@ -4,6 +4,8 @@ package com.atdxt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
 
 import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.http.ResponseEntity;
@@ -93,7 +95,7 @@ public class UserController {
 
 
     @PostMapping("/addUser")
-    public ModelAndView addUser(@ModelAttribute("addUser") UserEntity addUser) {
+    public ModelAndView addUser(@ModelAttribute("addUser") UserEntity addUser , @RequestParam("image") MultipartFile image) {
 
         try {
             ModelAndView modelAndView = new ModelAndView();
@@ -184,7 +186,12 @@ public class UserController {
                 modelAndView.setViewName("addUser");
                 return modelAndView;
             }
-
+            if (!image.isEmpty()) {
+                String imageUrl = userService.uploadImageToS3(image);
+                UserEntity2 userEntity2 = new UserEntity2();
+                userEntity2.setImageUrl(imageUrl);
+                addUser.setUserEntity2(userEntity2);
+            }
 
 
             userService.addUser(addUser);

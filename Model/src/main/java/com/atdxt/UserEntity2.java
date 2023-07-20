@@ -17,6 +17,10 @@ public class UserEntity2 {
     @Column(name = "city")
     private String city;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
+
     @Column(name = "country")
     private String country;
 

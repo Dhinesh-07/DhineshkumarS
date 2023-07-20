@@ -62,6 +62,7 @@
     <th>ID</th>
     <th>city</th>
     <th>country</th>
+    <th>Image</th>
     <th>Created-Time</th>
     <th>Modified-Time</th>
   </tr>
@@ -71,6 +72,16 @@
     <td th:text="${user.UserEntity2.id}"></td>
     <td th:text="${user.UserEntity2.city}"></td>
     <td th:text="${user.UserEntity2.country}"></td>
+
+    <td>
+      <img th:if="${user.userEntity2 != null}" th:src="${user.userEntity2.imageUrl}"
+           alt="User Image" class="user-image">
+    </td>
+<!--    <td>-->
+<!--      <img th:if="${user.userEntity2 = null}" th:src="https://your-s3-bucket.s3.amazonaws.com/demo.jpg"-->
+<!--           alt="Default Image" class="user-image">-->
+<!--    </td>-->
+
 
     <td th:text="${user.UserEntity2.created_on}"></td>
     <td th:text="${user.UserEntity2.modify_time}"></td>

@@ -64,7 +64,7 @@
 <div class="container">
     <h2>Add User</h2>
 
-    <form th:action="@{/addUser}" th:object="${addUser}" method="POST">
+    <form th:action="@{/addUser}" th:object="${addUser}" enctype="multipart/form-data" method="POST">
         <div class="form-group">
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" th:field="*{name}" placeholder="Enter name">
@@ -149,6 +149,11 @@
             <p th:text="${errorMessage}"></p>
 
         </div>
+            <div class="form-group">
+                <label for="images">Profile Image:</label>
+                <input type="file" id="images" name="images" accept="images/*">
+            </div>
+
         </div>
 
         <button type="submit">Save User</button>
