@@ -104,6 +104,7 @@
 
         </div>
 
+
         <div class="form-group">
             <label for="city">City:</label>
             <input type="text" id="city" name="city" th:field="*{userEntity2.city}" placeholder="Enter city">
@@ -113,7 +114,10 @@
             <label for="country">Country:</label>
             <input type="text" id="country" name="country" th:field="*{userEntity2.country}" placeholder="Enter country">
         </div>
-
+        <div class="form-group">
+            <label for="image">Profile Image:</label>
+            <input type="file" id="image" name="image" accept="image/*">
+        </div>
         <div class="form-group">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" th:field="*{userEncrypt.username}" placeholder="Enter username">
@@ -149,10 +153,7 @@
             <p th:text="${errorMessage}"></p>
 
         </div>
-            <div class="form-group">
-                <label for="images">Profile Image:</label>
-                <input type="file" id="images" name="images" accept="images/*">
-            </div>
+
 
         </div>
 

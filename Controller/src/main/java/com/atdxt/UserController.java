@@ -186,15 +186,16 @@ public class UserController {
                 modelAndView.setViewName("addUser");
                 return modelAndView;
             }
-            if (!image.isEmpty()) {
+            /*if (!image.isEmpty()) {
                 String imageUrl = userService.uploadImageToS3(image);
                 UserEntity2 userEntity2 = new UserEntity2();
                 userEntity2.setImageUrl(imageUrl);
+
                 addUser.setUserEntity2(userEntity2);
-            }
+            }*/
 
 
-            userService.addUser(addUser);
+            userService.addUser(addUser , image);
             logger.info("User added successfully");
             modelAndView.addObject("addUser", addUser);
             return new ModelAndView("redirect:/");

@@ -11,7 +11,6 @@ public class AwsS3Config {
 
     @Bean
     public S3Client s3Client() {
-        // Replace with your AWS region
         Region region = Region.US_EAST_1;
         return S3Client.builder()
                 .credentialsProvider(DefaultCredentialsProvider.create())

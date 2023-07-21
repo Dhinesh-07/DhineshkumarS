@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -73,7 +74,7 @@ public class UserService {
         }
     }
 
-    public void addUser(UserEntity addUser) {
+    public void addUser(UserEntity addUser, MultipartFile image) {
         try {
 
             if (addUser.getName() == null || addUser.getName().isEmpty()) {
@@ -108,15 +109,41 @@ public class UserService {
 
             userRepository.save(newUser);
 
-            if (addUser.getUserEntity2() != null) {
-                UserEntity2 userEntity2 = new UserEntity2();
-                userEntity2.setCity(addUser.getUserEntity2().getCity());
-                userEntity2.setCountry(addUser.getUserEntity2().getCountry());
+            UserEntity2 userEntity2 = new UserEntity2();
+
+            if (!image.isEmpty()) {
+                String imageUrl = uploadImageToS3(image);
+                userEntity2.setImageUrl(imageUrl);
+
+                if (addUser.getUserEntity2() != null) {
+                    String city = addUser.getUserEntity2().getCity();
+                    String country = addUser.getUserEntity2().getCountry();
+                    userEntity2.setCity(city);
+                    userEntity2.setCountry(country);
+                }
+
+                userEntity2.setCreated_on(getCurrentDate());
+                userEntity2.setModify_time(getCurrentDateTime());
+                userEntity2Repository.save(userEntity2);
+                newUser.setUserEntity2(userEntity2);
+            } else {
+
+                userEntity2.setImageUrl(""); // or userEntity2.setImageUrl(null)
+
+                if (addUser.getUserEntity2() != null) {
+                    String city = addUser.getUserEntity2().getCity();
+                    String country = addUser.getUserEntity2().getCountry();
+                    userEntity2.setCity(city);
+                    userEntity2.setCountry(country);
+                }
+
                 userEntity2.setCreated_on(getCurrentDate());
                 userEntity2.setModify_time(getCurrentDateTime());
                 userEntity2Repository.save(userEntity2);
                 newUser.setUserEntity2(userEntity2);
             }
+
+
 
             UserEncrypt userEncrypt = new UserEncrypt();
             if (isUserNameExists(addUser.getUserEncrypt().getUsername())) {
@@ -215,7 +242,6 @@ public class UserService {
         try {
             userEncrypt.setUsername(userEncrypt.getUsername());
             userEncrypt.encryptPassword();
-//            userEncrypt.encryptconfirmPassword();
             userEncrypt.setCreated_on(getCurrentDate());
             userEncrypt.setModify_time(getCurrentDateTime());
             userEncryptRepository.save(userEncrypt);
@@ -263,23 +289,37 @@ public class UserService {
                 .orElse(null);
     }
 
+
+
+
+
+
+
+
+
+
     public boolean isPasswordConfirmed(String password, String confirm_password) {
         return password != null && confirm_password != null && password.equals(confirm_password);
     }
 
+
+    @Value("${aws.Bucket}")
+    private String awsS3BucketName;
+
+
     public String uploadImageToS3(MultipartFile image) throws IOException {
         try {
-            String bucketName = "localmysql-s3"; // Replace with your S3 bucket name
+            String bucketName = "localmysql-s3";
             String key = "images/" + image.getOriginalFilename();
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                     .bucket(bucketName)
                     .key(key)
                     .contentType(image.getContentType())
-                    .acl(ObjectCannedACL.PUBLIC_READ) // Optional: Make the uploaded image publicly readable
+                    .acl(ObjectCannedACL.PUBLIC_READ)
                     .build();
             s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(image.getInputStream(), image.getSize()));
 
-            return "https://your-s3-bucket.s3.amazonaws.com/" + key;
+            return "https://"+bucketName+".s3.amazonaws.com/" + key;
         } catch (S3Exception e) {
             e.printStackTrace();
             // Handle the exception accordingly
