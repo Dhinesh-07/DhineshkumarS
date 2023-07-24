@@ -91,7 +91,20 @@
 
 
     </dependencies>
-
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <spring.profiles.active>dev</spring.profiles.active>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <spring.profiles.active>prod</spring.profiles.active>
+            </properties>
+        </profile>
+    </profiles>
     <build>
         <plugins>
 
@@ -100,20 +113,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <skip>false</skip>
-                    <profiles>
-                        <profile>
-                            <id>dev</id>
-                            <properties>
-                                <spring.profiles.active>dev</spring.profiles.active>
-                            </properties>
-                        </profile>
-                        <profile>
-                            <id>prod</id>
-                            <properties>
-                                <spring.profiles.active>prod</spring.profiles.active>
-                            </properties>
-                        </profile>
-                    </profiles>
+
 
                 </configuration>
             </plugin>

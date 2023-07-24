@@ -128,7 +128,7 @@ public class UserService {
                 newUser.setUserEntity2(userEntity2);
             } else {
 
-                userEntity2.setImageUrl(""); // or userEntity2.setImageUrl(null)
+                userEntity2.setImageUrl("");
 
                 if (addUser.getUserEntity2() != null) {
                     String city = addUser.getUserEntity2().getCity();
@@ -309,17 +309,17 @@ public class UserService {
 
     public String uploadImageToS3(MultipartFile image) throws IOException {
         try {
-            String bucketName = "localmysql-s3";
+           /* String bucketName = "localmysql-s3";*/
             String key = "images/" + image.getOriginalFilename();
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
-                    .bucket(bucketName)
+                    .bucket(awsS3BucketName)
                     .key(key)
                     .contentType(image.getContentType())
                     .acl(ObjectCannedACL.PUBLIC_READ)
                     .build();
             s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(image.getInputStream(), image.getSize()));
 
-            return "https://"+bucketName+".s3.amazonaws.com/" + key;
+            return "https://"+awsS3BucketName+".s3.amazonaws.com/" + key;
         } catch (S3Exception e) {
             e.printStackTrace();
             // Handle the exception accordingly
