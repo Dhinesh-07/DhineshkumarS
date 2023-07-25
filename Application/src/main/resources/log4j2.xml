@@ -1,55 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration >
-
-    <Properties>
-        <Property name="appName">LOGGING fILE</Property>
-        <Property name="LOG_PATH">/var/log/JDBC_Connection</Property>
-    </Properties>
-
+<Configuration>
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout
                     pattern="%style{%d{ISO8601}}{black} %highlight{%-5level }[%style{%t}{bright,blue}] %style{%C{1.}}{bright,yellow}: %msg%n%throwable" />
         </Console>
-
-        <RollingFile name="InfoFile" fileName="${LOG_PATH}/info.log"
-                     filePattern="${LOG_PATH}/info-%d{yyyy-MM-dd_HH-mm}.%i.log">
-            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%${appName}] [%-5level] %logger{36} - %msg%n" />
+        <!-- ERROR LOG -->
+        <RollingFile name="ErrorFile"
+                     fileName="/var/log/JDBC_Connection/error.log"
+                     filePattern="/var/log/JDBC_Connection/$${date:yyyy-MM}/spring-boot-logger-log4j2-%d{-dd-MMMM-yyyy}-%i-error.log" append="true">
+            <Filters>
+                <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY" />
+            </Filters>
+            <PatternLayout>
+                <pattern>%d %p %C{1.} [%t] %m%n</pattern>
+            </PatternLayout>
             <Policies>
                 <OnStartupTriggeringPolicy />
-                <SizeBasedTriggeringPolicy size="10 MB" />
-                <CronTriggeringPolicy schedule="0 0/5 * * * ?" />
+                <TimeBasedTriggeringPolicy interval="5" modulate="true" />
             </Policies>
-            <Filters>
-                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY" />
-            </Filters>
-
-            <DefaultRolloverStrategy max="10" />
+            <DefaultRolloverStrategy max="30" />
         </RollingFile>
 
-        <RollingFile name="ErrorFile" fileName="${LOG_PATH}/error.log"
-                     filePattern="${LOG_PATH}/error-%d{yyyy-MM-dd_HH-mm}.%i.log" >
-            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%${appName}] [%-5level] %logger{36} - %msg%n" />
+        <!-- INFO LOG -->
+        <RollingFile name="InfoFile"
+                     fileName="/var/log/JDBC_Connection/info.log"
+                     filePattern="/var/log/JDBC_Connection/$${date:yyyy-MM}/spring-boot-logger-log4j2-%d{-dd-MMMM-yyyy}-%i-info.log" append="true">
+            <Filters>
+                <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY" />
+            </Filters>
+            <PatternLayout>
+                <pattern>%d %p %C{1.} [%t] %m%n</pattern>
+            </PatternLayout>
             <Policies>
                 <OnStartupTriggeringPolicy />
-                <SizeBasedTriggeringPolicy size="10 MB" />
-                <CronTriggeringPolicy schedule="0 0/5 * * * ?" />
+                <TimeBasedTriggeringPolicy interval="5" modulate="true" />
             </Policies>
-            <Filters>
-                <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY" />
-            </Filters>
-            <DefaultRolloverStrategy max="10" />
+            <DefaultRolloverStrategy max="30" />
         </RollingFile>
     </Appenders>
 
     <Loggers>
         <Root level="info">
             <AppenderRef ref="Console" />
-
+            <AppenderRef ref="ErrorFile" />
             <AppenderRef ref="InfoFile" />
-            <AppenderRef ref="ErrorFile"  />
         </Root>
 
-
+        <Logger name="com.atdxt" level="error">
+            <AppenderRef ref="ErrorFile" />
+        </Logger>
     </Loggers>
+
 </Configuration>

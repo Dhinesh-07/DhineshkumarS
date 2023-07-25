@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.*;
+
 
 
 @Entity
@@ -34,7 +34,7 @@ public class UserEntity {
 
 
     @Column(name = "phone_number")
-    @Size(min=5 ,max = 10)
+
     private String phone_number;
 
     @Column(name = "created_on")

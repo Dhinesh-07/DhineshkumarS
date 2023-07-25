@@ -303,6 +303,19 @@ public class UserService {
     }
 
 
+    @Value("${aws.accessKeyId}")
+    private String awsAccessKeyId;
+    {
+        System.out.println(awsAccessKeyId);
+    }
+
+
+    @Value("${aws.secretKey}")
+    private String awsSecretKey;
+
+    @Value("${aws.region}")
+    private String awsRegion;
+
     @Value("${aws.Bucket}")
     private String awsS3BucketName;
 
