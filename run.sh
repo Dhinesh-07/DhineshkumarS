@@ -9,7 +9,7 @@ PROFILE=$1
 
 VERSION_FILE="version.txt"
 
-# Function to get the version from the version.txt file or set to 1 if not present
+
 get_version() {
     if [ -f "$VERSION_FILE" ]; then
         VERSION=$(cat "$VERSION_FILE")
@@ -49,17 +49,10 @@ if [ -n "$EXISTING_CONTAINER_ID" ]; then
     docker rm "$EXISTING_CONTAINER_ID" >/dev/null
 fi
 
-# Run the Docker container with the specified profile
+
 echo "Running the application with the '$PROFILE' profile..."
 
-##docker run -p 8080:8080 --network="host" -e SPRING_PROFILES_ACTIVE="$PROFILE" --name "$CONTAINER_NAME" "$IMAGE_TAG"
-#docker run -p 8080:8080 --network="host" \
-#  -e SPRING_PROFILES_ACTIVE="$PROFILE" \
-#  -e aws.accessKeyId="$aws.accessKeyId" \
-#  -e aws.secretKey="$aws.secretKey" \
-#  -e aws.region="$aws.region" \
-#  -e aws.Bucket="$aws.Bucket" \
-#  --name "$CONTAINER_NAME" "$IMAGE_TAG"
+
 
 
 docker run -p 8080:8080 --network="host" \
