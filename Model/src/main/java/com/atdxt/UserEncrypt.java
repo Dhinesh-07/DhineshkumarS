@@ -34,8 +34,14 @@ public class UserEncrypt {
     @Column(name = "modify_time")
     private String modify_time;
 
+
+/*    @OneToOne(fetch = FetchType.LAZY)
+    @PrimaryKeyJoinColumn
+    private UserEntity user;*/
+
+
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
+    @PrimaryKeyJoinColumn(name = "user_id")
     private UserEntity user;
 
     public void encryptPassword() {

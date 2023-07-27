@@ -32,8 +32,16 @@ public class UserEntity2 {
     @Column(name = "modify_time")
     private String modify_time;
 
+
+  /* *//* @Column(name = "user_id", nullable = false)
+    private Integer user_id;
+*//*
+   @OneToOne(fetch = FetchType.LAZY)
+   @PrimaryKeyJoinColumn
+   private UserEntity user;*/
+
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
+    @PrimaryKeyJoinColumn(name = "user_id")
     private UserEntity user;
     public UserEntity2(){
     }

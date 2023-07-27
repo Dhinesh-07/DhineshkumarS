@@ -56,6 +56,5 @@ echo "Running the application with the '$PROFILE' profile..."
 
 
 docker run -p 8080:8080 --network="host" \
-  -v "$(pwd)/$AWS_PROPERTIES_FILE:/app/application.properties" \
   -e SPRING_PROFILES_ACTIVE="$PROFILE" \
   --name "$CONTAINER_NAME" "$IMAGE_TAG"
