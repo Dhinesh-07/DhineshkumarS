@@ -44,13 +44,13 @@
   </thead>
   <tbody>
   <tr th:each="user : ${users}">
-    <td th:text="${user.id}"></td>
-    <td th:text="${user.name}"></td>
-    <td th:text="${user.email}"></td>
-    <td th:text="${user.phone_number}"></td>
-    <td th:text="${user.age}"></td>
-    <td th:text="${user.created_on}"></td>
-    <td th:text="${user.modify_time}"></td>
+    <td th:text="${user.id != null ? user.id : ''}"></td>
+    <td th:text="${user.name != null ? user.name : ''}"></td>
+    <td th:text="${user.email != null ? user.email : ''}"></td>
+    <td th:text="${user.phone_number != null ? user.phone_number : ''}"></td>
+    <td th:text="${user.age != null ? user.age : ''}"></td>
+    <td th:text="${user.created_on != null ? user.created_on : ''}"></td>
+    <td th:text="${user.modify_time != null ? user.modify_time : ''}"></td>
   </tr>
   </tbody>
 </table>
@@ -69,26 +69,14 @@
   </thead>
   <tbody>
   <tr th:each="user : ${users}">
-    <td th:text="${user.UserEntity2.id}"></td>
-    <td th:text="${user.UserEntity2.city}"></td>
-    <td th:text="${user.UserEntity2.country}"></td>
-
+    <td th:text="${user.UserEntity2?.id != null ? user.UserEntity2.id : ''}"></td>
+    <td th:text="${user.UserEntity2?.city != null ? user.UserEntity2.city : ''}"></td>
+    <td th:text="${user.UserEntity2?.country != null ? user.UserEntity2.country : ''}"></td>
     <td>
-      <img th:if="${user.userEntity2 != null}" th:src="${user.userEntity2.imageUrl}"
-           alt="User Image" class="user-image" >
+      <img th:if="${user.userEntity2 != null}" th:src="${user.userEntity2.imageUrl}" alt="User Image" class="user-image">
     </td>
-<!--    <td>-->
-<!--      <img th:if="${user.userEntity2 = null}" th:src="https://your-s3-bucket.s3.amazonaws.com/demo.jpg"-->
-<!--           alt="Default Image" class="user-image">-->
-<!--    </td>-->
-
-
-    <td th:text="${user.UserEntity2.created_on}"></td>
-    <td th:text="${user.UserEntity2.modify_time}"></td>
-
-
-
-
+    <td th:text="${user.UserEntity2?.created_on != null ? user.UserEntity2.created_on : ''}"></td>
+    <td th:text="${user.UserEntity2?.modify_time != null ? user.UserEntity2.modify_time : ''}"></td>
   </tr>
   </tbody>
 </table>

@@ -126,6 +126,8 @@ public class UserService {
                 userEntity2.setModify_time(getCurrentDateTime());
                 userEntity2Repository.save(userEntity2);
                 newUser.setUserEntity2(userEntity2);
+                userEntity2.setUser(newUser);
+
             } else {
 
                 userEntity2.setImageUrl("");
@@ -141,6 +143,9 @@ public class UserService {
                 userEntity2.setModify_time(getCurrentDateTime());
                 userEntity2Repository.save(userEntity2);
                 newUser.setUserEntity2(userEntity2);
+
+                userEntity2.setUser(newUser);
+                System.out.println(newUser);
             }
 
 
@@ -168,7 +173,10 @@ public class UserService {
             userEncrypt.setCreated_on(getCurrentDate());
             userEncrypt.setModify_time(getCurrentDateTime());
             userEncryptRepository.save(userEncrypt);
+
+
             newUser.setUserEncrypt(userEncrypt);
+            userEncrypt.setUser(newUser);
 
             userRepository.save(newUser);
             logger.info("User added successfully");

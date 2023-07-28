@@ -1,5 +1,6 @@
 package com.atdxt;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,13 +36,12 @@ public class UserEncrypt {
     private String modify_time;
 
 
-/*    @OneToOne(fetch = FetchType.LAZY)
-    @PrimaryKeyJoinColumn
-    private UserEntity user;*/
+
 
 
     @OneToOne(fetch = FetchType.LAZY)
-    @PrimaryKeyJoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id")
+    @JsonBackReference
     private UserEntity user;
 
     public void encryptPassword() {
