@@ -54,7 +54,12 @@ echo "Running the application with the '$PROFILE' profile..."
 
 
 
-
-docker run -p 8080:8080 --network="host" \
+docker run -d -p 8080:8080 --network="host" \
   -e SPRING_PROFILES_ACTIVE="$PROFILE" \
   --name "$CONTAINER_NAME" "$IMAGE_TAG"
+
+DOCKERHUB_USER="dhineshdk07"
+DOCKERHUB_REPO="springboot"
+
+docker tag "$IMAGE_TAG" "$DOCKERHUB_USER/$DOCKERHUB_REPO:3.2.$VERSION"
+docker push "$DOCKERHUB_USER/$DOCKERHUB_REPO:3.2.$VERSION"
