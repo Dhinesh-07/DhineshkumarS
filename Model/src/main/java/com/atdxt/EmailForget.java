@@ -1,9 +1,9 @@
+
 package com.atdxt;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
 
@@ -11,8 +11,6 @@ import java.time.LocalDateTime;
 @Setter
 @Getter
 public class EmailForget {
-
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,3 +25,4 @@ public class EmailForget {
 
     // Constructors, getters, and setters
 }
+

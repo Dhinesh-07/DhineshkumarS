@@ -1,6 +1,8 @@
 package com.atdxt;
 
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -45,6 +48,27 @@ public class UserController {
 
     }
 
+    @GetMapping("/login")
+    public ModelAndView showLoginForm() {
+        ModelAndView modelAndView = new ModelAndView("login");
+        return modelAndView;
+    }
+
+    @PostMapping("/login")
+    public RedirectView processLogin(@RequestParam("username") String username,
+                                     @RequestParam("password") String password,
+                                     HttpServletRequest request) {
+
+        try {
+            request.login(username, password);
+            return new RedirectView("/dashboard");
+        } catch (ServletException e) {
+
+            RedirectView redirectView = new RedirectView("/login");
+            redirectView.addStaticAttribute("error", "Invalid username or password");
+            return redirectView;
+        }
+    }
 
   @GetMapping("/users")
     public ModelAndView getAllUsers(ModelAndView model,  Principal principal) {
@@ -238,7 +262,30 @@ public class UserController {
     }
 
 
+    @GetMapping("/forgot-password")
+    public ModelAndView showForgotPasswordPage() {
+        ModelAndView modelAndView = new ModelAndView("forgot-password");
+        return modelAndView;
 
+    }
+
+
+    @PostMapping("/forgot-password")
+    public void forgotPassword(@RequestParam("email") String email) {
+        userService.processForgotPassword(email);
+
+    }
+    @GetMapping("/forgot-password/reset")
+    public ModelAndView showResetPasswordPage(@RequestParam String token) {
+        ModelAndView modelAndView = new ModelAndView("resetpwd");
+        return modelAndView;
+    }
+
+    @PostMapping("/forgot-password/reset")
+    public ResponseEntity<String> resetPassword(@RequestParam String token, @RequestParam String newPassword) {
+        userService.resetPassword(token, newPassword);
+        return ResponseEntity.ok("Password reset successful.");
+    }
 
 }
 

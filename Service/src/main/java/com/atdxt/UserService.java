@@ -6,6 +6,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -20,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -28,13 +33,19 @@ public class UserService {
 
     private final UserEntity2Repository userEntity2Repository;
     private final UserEncryptRepository userEncryptRepository;
+
+    private final EmailForgetRepository emailForgetRepository;
+    private final JavaMailSender javaMailSender;
+
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
-    public UserService(UserRepository userRepository, UserEntity2Repository userEntity2Repository, UserEncryptRepository userEncryptRepository) {
+    public UserService(UserRepository userRepository, UserEntity2Repository userEntity2Repository, UserEncryptRepository userEncryptRepository, JavaMailSender javaMailSender,EmailForgetRepository emailForgetRepository) {
         this.userRepository = userRepository;
         this.userEntity2Repository = userEntity2Repository;
         this.userEncryptRepository = userEncryptRepository;
+        this.emailForgetRepository=emailForgetRepository;
+        this.javaMailSender=javaMailSender;
         this.s3Client = S3Client.builder().region(Region.US_EAST_1).build();
     }
 
@@ -347,6 +358,54 @@ public class UserService {
             throw e;
         }
     }
+
+
+
+    public void processForgotPassword(String email) {
+        Optional<UserEntity> user = userRepository.findByEmail(email);
+        if (!user.isPresent()) {
+            throw new UsernameNotFoundException("User not found.");
+        }
+
+        String token = UUID.randomUUID().toString();
+        EmailForget emailForget = emailForgetRepository.findByUser(user.get());
+        if (emailForget == null) {
+            emailForget = new EmailForget();
+            emailForget.setUser(user.get());
+        }
+        emailForget.setToken(token);
+        emailForgetRepository.save(emailForget);
+
+        sendResetPasswordEmail(email, token); // Send reset password email
+    }
+
+
+    public void sendResetPasswordEmail(String email, String token) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(email);
+        message.setSubject("Password Reset");
+        message.setText("Here is your password reset link: http://localhost:8080/forgot-password/reset?token=" + token);
+
+        javaMailSender.send(message);
+    }
+    public void resetPassword(String token, String newPassword) {
+        EmailForget emailForget = emailForgetRepository.findByToken(token);
+        if (emailForget != null ) {
+            UserEncrypt userEncrypt = userEncryptRepository.findByUserId(emailForget.getUser().getId());
+            if (userEncrypt != null) {
+                userEncrypt.setPassword(new BCryptPasswordEncoder().encode(newPassword));
+                userEncryptRepository.save(userEncrypt);
+                emailForgetRepository.delete(emailForget);
+            } else {
+                throw new IllegalArgumentException("User not found.");
+            }
+        } else {
+            throw new IllegalArgumentException("Invalid or expired token.");
+        }
+    }
+
+
+
 
 
 }

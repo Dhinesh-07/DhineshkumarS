@@ -51,11 +51,13 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests(authorize -> authorize
+                        .requestMatchers("/login").permitAll()
                         .requestMatchers("/users").authenticated()
+                        .requestMatchers("/forgot-password").permitAll()
                         .anyRequest().permitAll()
                 )
                 .formLogin(formLogin -> formLogin
-                        .defaultSuccessUrl("/users")
+                        .loginPage("/login").defaultSuccessUrl("/users")
                 )
                 .httpBasic(withDefaults())
                 .sessionManagement(sessionManagement -> sessionManagement

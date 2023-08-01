@@ -11,5 +11,7 @@ import java.util.Optional;
 public interface UserEncryptRepository extends JpaRepository<UserEncrypt, Integer> {
 
     boolean existsByUserName(String username);
+
+    UserEncrypt findByUserId(Integer userId);
     Optional<UserEncrypt> findByUsername(String username);
 }

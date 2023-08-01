@@ -55,7 +55,10 @@ public class UserEntity {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnoreProperties("user")
     UserEncrypt userEncrypt;
-
+    public void setUserEncrypt(UserEncrypt userEncrypt) {
+        this.userEncrypt = userEncrypt;
+        userEncrypt.setUser(this);
+    }
 
 
 
