@@ -40,16 +40,16 @@ public class UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
-    public UserService(UserRepository userRepository, UserEntity2Repository userEntity2Repository, UserEncryptRepository userEncryptRepository, JavaMailSender javaMailSender,EmailForgetRepository emailForgetRepository) {
+    public UserService(UserRepository userRepository, UserEntity2Repository userEntity2Repository, UserEncryptRepository userEncryptRepository, JavaMailSender javaMailSender, EmailForgetRepository emailForgetRepository) {
         this.userRepository = userRepository;
         this.userEntity2Repository = userEntity2Repository;
         this.userEncryptRepository = userEncryptRepository;
-        this.emailForgetRepository=emailForgetRepository;
-        this.javaMailSender=javaMailSender;
+        this.emailForgetRepository = emailForgetRepository;
+        this.javaMailSender = javaMailSender;
         this.s3Client = S3Client.builder().region(Region.US_EAST_1).build();
     }
 
-        public List<UserEntity> getAllUsers() {
+    public List<UserEntity> getAllUsers() {
         try {
             logger.info("Fetching all users");
             return userRepository.findAll();
@@ -112,8 +112,7 @@ public class UserService {
                     throw new CustomException("Invalid phone number");
                 }
 
-                    newUser.setPhone_number(addUser.getPhone_number());
-
+                newUser.setPhone_number(addUser.getPhone_number());
 
 
             }
@@ -160,7 +159,6 @@ public class UserService {
             }
 
 
-
             UserEncrypt userEncrypt = new UserEncrypt();
             if (isUserNameExists(addUser.getUserEncrypt().getUsername())) {
                 throw new IllegalArgumentException("userName already exists, change email address");
@@ -168,10 +166,10 @@ public class UserService {
 
             userEncrypt.setUsername(addUser.getUserEncrypt().getUsername());
 
-            if (addUser.getUserEncrypt().getPassword() ==null){
+            if (addUser.getUserEncrypt().getPassword() == null) {
                 throw new IllegalArgumentException("Password must not be empty.");
             }
-            if (addUser.getUserEncrypt().getConfirmpassword() ==null){
+            if (addUser.getUserEncrypt().getConfirmpassword() == null) {
                 throw new IllegalArgumentException("confirm");
             }
             if (!addUser.getUserEncrypt().getConfirmpassword().equals(addUser.getUserEncrypt().getPassword())) {
@@ -198,14 +196,11 @@ public class UserService {
     }
 
 
-
-
     public void updateUser(Integer id, UserEntity user) {
         try {
             Optional<UserEntity> userOptional = userRepository.findById(id);
             if (userOptional.isPresent()) {
                 UserEntity existingUser = userOptional.get();
-
 
 
                 if (!isValidEmail(user.getEmail())) {
@@ -257,7 +252,7 @@ public class UserService {
         return sdf.format(new Date());
     }
 
- public void saveUserEncrypt(UserEncrypt userEncrypt) {
+    public void saveUserEncrypt(UserEncrypt userEncrypt) {
         try {
             userEncrypt.setUsername(userEncrypt.getUsername());
             userEncrypt.encryptPassword();
@@ -273,10 +268,10 @@ public class UserService {
     public boolean isValidEmail(String email) {
         return email != null && email.matches("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}");
     }
+
     public boolean isValidPhoneNumber(String phone_number) {
         return phone_number != null && phone_number.matches("\\d{10}");
     }
-
 
 
     public boolean isNameExists(String name) {
@@ -286,6 +281,7 @@ public class UserService {
     public boolean isEmailExists(String email) {
         return userRepository.existsByEmail(email);
     }
+
     public boolean isUserNameExists(String email) {
         return userEncryptRepository.existsByUserName(email);
     }
@@ -309,14 +305,6 @@ public class UserService {
     }
 
 
-
-
-
-
-
-
-
-
     public boolean isPasswordConfirmed(String password, String confirm_password) {
         return password != null && confirm_password != null && password.equals(confirm_password);
     }
@@ -324,6 +312,7 @@ public class UserService {
 
     @Value("${aws.accessKeyId}")
     private String awsAccessKeyId;
+
     {
         System.out.println(awsAccessKeyId);
     }
@@ -341,7 +330,7 @@ public class UserService {
 
     public String uploadImageToS3(MultipartFile image) throws IOException {
         try {
-           /* String bucketName = "localmysql-s3";*/
+            /* String bucketName = "localmysql-s3";*/
             String key = "images/" + image.getOriginalFilename();
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                     .bucket(awsS3BucketName)
@@ -351,7 +340,7 @@ public class UserService {
                     .build();
             s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(image.getInputStream(), image.getSize()));
 
-            return "https://"+awsS3BucketName+".s3.amazonaws.com/" + key;
+            return "https://" + awsS3BucketName + ".s3.amazonaws.com/" + key;
         } catch (S3Exception e) {
             e.printStackTrace();
             // Handle the exception accordingly
@@ -361,7 +350,7 @@ public class UserService {
 
 
 
-    public void processForgotPassword(String email) {
+    /*public void processForgotPassword(String email) {
         Optional<UserEntity> user = userRepository.findByEmail(email);
         if (!user.isPresent()) {
             throw new UsernameNotFoundException("User not found.");
@@ -408,4 +397,6 @@ public class UserService {
 
 
 
+
+*/
 }

@@ -262,7 +262,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/forgot-password")
+   /* @GetMapping("/forgot-password")
     public ModelAndView showForgotPasswordPage() {
         ModelAndView modelAndView = new ModelAndView("forgot-password");
         return modelAndView;
@@ -285,7 +285,7 @@ public class UserController {
     public ResponseEntity<String> resetPassword(@RequestParam String token, @RequestParam String newPassword) {
         userService.resetPassword(token, newPassword);
         return ResponseEntity.ok("Password reset successful.");
-    }
+    }*/
 
 }
 
