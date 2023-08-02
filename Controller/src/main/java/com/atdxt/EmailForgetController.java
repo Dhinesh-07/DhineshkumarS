@@ -36,23 +36,24 @@ public class EmailForgetController {
     @PostMapping("/forgot-password")
     public ModelAndView forgotPassword(@RequestParam("email") String userEmail, RedirectAttributes redirectAttributes) {
         logger.info("POST request received for /forgot-password");
+        ModelAndView modelAndView = new ModelAndView("forgot-password");
         if (userEmail == null || userEmail.isEmpty()) {
-            ModelAndView errorModelAndView = new ModelAndView("forgot-password");
-            errorModelAndView.addObject("errorresetemail", "Email cannot be empty.");
-            return errorModelAndView;
+
+            modelAndView.addObject("errorresetemail", "Email cannot be empty.");
+            return modelAndView;
         }else if (!userService.isValidEmail(userEmail)) {
-            ModelAndView errorModelAndView = new ModelAndView("forgot-password");
-            errorModelAndView.addObject("invalidemailerror", "Invalid email address");
-            return errorModelAndView;
+
+            modelAndView.addObject("invalidemailerror", "Invalid email address");
+            return modelAndView;
         }
 
         if (!emailForgetService.isEmailRegistered(userEmail)) {
-            ModelAndView errorModelAndView = new ModelAndView("forgot-password");
-            errorModelAndView.addObject("emailnotregisterederror", "Email is not registered. Kindly register.");
-            return errorModelAndView;
+
+            modelAndView.addObject("emailnotregisterederror", "Email is not registered. Kindly register.");
+            return modelAndView;
         }
         ResponseEntity<String> response = emailForgetService.generatePasswordResetToken(userEmail);
-        ModelAndView modelAndView = new ModelAndView("forgot-password");
+
         modelAndView.addObject("message", response.getBody());
         return modelAndView;
     }
