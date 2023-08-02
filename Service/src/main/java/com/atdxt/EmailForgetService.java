@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.UUID;
 import java.util.Optional;
 
@@ -35,69 +37,85 @@ public class EmailForgetService {
 
     public ResponseEntity<String> generatePasswordResetToken(String userEmail) {
         Optional<UserEntity> user = userRepository.findByEmail(userEmail);
-        // The `user` variable will never be null due to `Optional`, but it could be empty.
-        if (user.isEmpty()) { // Better use `isEmpty()` instead of `== null`.
+
+        if (user.isEmpty()) {
             logger.error("User not found for email: " + userEmail);
             return ResponseEntity.badRequest().body("User not found.");
         }
 
-        // Generating a random UUID is a good approach for token generation.
+
         String token = UUID.randomUUID().toString();
         LocalDateTime expiryDate = LocalDateTime.now().plusHours(1);
 
-        // Save the token in the database
-        EmailForget emailForget = new EmailForget();
+        EmailForget emailForget = emailForgetRepository.findByUser(user.get());
+        if (emailForget == null) {
+
+            emailForget = new EmailForget();
+            emailForget.setUser(user.get());
+        }
+
+
         emailForget.setToken(token);
         emailForget.setExpiryDate(expiryDate);
-        emailForget.setUser(user.get());
-        emailForgetRepository.save(emailForget);
+        emailForgetRepository.saveAndFlush(emailForget); // Save or update the record.
 
-        // Sending an email with the token link should be an async operation for better performance.
         String resetLink = "http://localhost:8080/reset-password?token=" + token;
         String emailContent = "Click the link to reset your password: " + resetLink;
         sendEmail(userEmail, "Password Reset", emailContent);
 
         logger.info("Token generated for user with email: " + userEmail + ", Token: " + token);
 
-        // Return success response
         return ResponseEntity.ok("Password reset link sent to your email.");
     }
 
+
     public ResponseEntity<String> validatePasswordResetToken(String token) {
+        logger.info("Validating password reset token: " + token);
+
         EmailForget emailForget = emailForgetRepository.findByToken(token);
-        // Use `isEmpty()` to check if the optional is empty.
         if (emailForget == null || emailForget.getExpiryDate().isBefore(LocalDateTime.now())) {
-            // Invalid or expired token, return appropriate response
+            logger.error("Invalid or expired token for token: " + token);
             return ResponseEntity.badRequest().body("Invalid or expired token.");
         }
 
         // Show the password reset page to the user
+        logger.info("Password reset token is valid for token: " + token);
         return ResponseEntity.ok("Show the password reset page here.");
     }
 
-    public ResponseEntity<String> updatePassword(String token, String password) {
+
+    public ResponseEntity<String> updatePassword(String token, String password , String password1) {
         EmailForget emailForget = emailForgetRepository.findByToken(token);
-        // Use `isEmpty()` to check if the optional is empty.
+
         if (emailForget == null || emailForget.getExpiryDate().isBefore(LocalDateTime.now())) {
-            // Invalid or expired token, return appropriate response
+            logger.error("Invalid or expired token for token: " + token);
             return ResponseEntity.badRequest().body("Invalid or expired token.");
         }
 
         UserEntity user = emailForget.getUser();
         UserEncrypt userEncrypt = user.getUserEncrypt();
 
-        // Update the user's encrypted password and save it in the database
         userEncrypt.setPassword(password);
+        userEncrypt.setPassword(password1);
         userEncrypt.encryptPassword(); // Encrypt the password again (optional)
+
+
+        userEncrypt.setModify_time(getCurrentDateTime());
+
         userEncryptRepository.save(userEncrypt);
 
         // Delete the used token from the database
         emailForgetRepository.delete(emailForget);
 
-        // Return success response
+        logger.info("Password updated for user with email: " + user.getEmail());
+
         return ResponseEntity.ok("Password updated successfully.");
     }
 
+    private String getCurrentDateTime() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        return sdf.format(new Date());
+    }
     private void sendEmail(String to, String subject, String content) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
@@ -105,4 +123,13 @@ public class EmailForgetService {
         message.setText(content);
         javaMailSender.send(message);
     }
+
+
+    public boolean isEmailRegistered(String email) {
+        Optional<UserEntity> user = userRepository.findByEmail(email);
+        return user.isPresent();
+    }
+
+
+
 }

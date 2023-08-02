@@ -262,31 +262,6 @@ public class UserController {
     }
 
 
-   /* @GetMapping("/forgot-password")
-    public ModelAndView showForgotPasswordPage() {
-        ModelAndView modelAndView = new ModelAndView("forgot-password");
-        return modelAndView;
-
-    }
-
-
-    @PostMapping("/forgot-password")
-    public void forgotPassword(@RequestParam("email") String email) {
-        userService.processForgotPassword(email);
-
-    }
-    @GetMapping("/forgot-password/reset")
-    public ModelAndView showResetPasswordPage(@RequestParam String token) {
-        ModelAndView modelAndView = new ModelAndView("resetpwd");
-        return modelAndView;
-    }
-
-    @PostMapping("/forgot-password/reset")
-    public ResponseEntity<String> resetPassword(@RequestParam String token, @RequestParam String newPassword) {
-        userService.resetPassword(token, newPassword);
-        return ResponseEntity.ok("Password reset successful.");
-    }*/
-
 }
 
 

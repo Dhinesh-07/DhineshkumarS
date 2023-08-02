@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:color="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Forgot Password</title>
+    <title>Error</title>
 </head>
+<body>
 <style>
     .container {
       max-width: 400px;
@@ -55,27 +56,10 @@
     }
 
   </style>
-<body>
-<h1>Forgot Password</h1>
-<form th:action="@{/forgot-password}" method="post">
-    <label for="email">Email:</label>
-    <input type="text" id="email" name="email" >
-    <div th:if="${errorresetemail}"  >
-        <p th:text="${errorresetemail}" style="color: red;"></p>
-    </div>
-    <div th:if="${invalidemailerror}"  >
-        <p th:text="${invalidemailerror}" style="color: red;"></p>
-    </div>
-    <div th:if="${emailnotregisterederror}"  >
-        <p th:text="${emailnotregisterederror}" style="color: red;"></p>
-    </div>
-    <button type="submit">Submit</button>
+<h1>Error</h1>
+<p th:text="${tokenError}" style="color: red;"></p>
+<form th:action="@{/}" method="get">
+    <button type="submit">Go back to Home Page</button>
 </form>
-<div th:if="${message}" style="color: green;">
-    Email sent! Please check your inbox for password reset instructions.
-</div>
-
-<meta http-equiv="refresh" th:if="${message}" content="4;url=/" />
-
 </body>
 </html>

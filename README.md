@@ -169,32 +169,24 @@ _Admin credential for both development and production_
     Username:admin
     Password:123
 
+**_Script was added to run development and production_**
 
 **Development**
 
-_For development the local mysql database was connected_
-
-To build the application for development, use the following command:
-
-    mvn clean install -Pdev
-
-To run the application in development mode, use the following command:
-
-    mvn spring-boot:run -Dspring-boot.run.profiles=dev
+    /.local dev 
 
 **Production**
 
-_For Production the RDS mysql database was connected_
+    /.local dev
 
 
-To build the application for production, use the following command:
+**Development for Docker**
 
-    mvn clean install -Pprod
+    /.run dev 
 
-To run the application in production mode, use the following command:
+**Production for Dcoker**
 
-    mvn spring-boot:run -Dspring-boot.run.profiles=prod
-
+    /.run dev
 
 
 ## AWS Details
@@ -205,12 +197,12 @@ To run the application in production mode, use the following command:
         
         ec2-13-48-193-15.eu-north-1.compute.amazonaws.com
 
-**RDS Instance**
+**RDS Instance for Psql**
 - **Endpoint**:                            
 
-      mydbinstance.crezjjaofuyj.eu-north-1.rds.amazonaws.com
+    database-postgres.c0x7yiddfdt2.eu-north-1.rds.amazonaws.com
 
-- **Port**: 3306
+- **Port**: 5432
 - **Username**: dhinesh
 - **Password**: Dhinesh7
 
@@ -235,19 +227,8 @@ Connect to your instance using SSH and the Public DNS:
 
     ssh -i "Spring_boot.pem" ubuntu@ec2-13-48-193-15.eu-north-1.compute.amazonaws.com
 
+**Connetcing to rds**
 
-**Scp command**
-
-Use the scp command to copy the file to the EC2 instance:
-
-    scp -i Spring_boot.pem /home/dhinesh/Downloads/war/Application-0.0.1-SNAPS
-
-**run war file using java**
-   
-    java -jar file_name
-
-**Importing to rds**
-
-    mysql -h mydbinstance.crezjjaofuyj.eu-north-1.rds.amazonaws.com -u dhinesh -p loggingmodule < Data_Module/dhines_db.sql
+    psql -h database-postgres.c0x7yiddfdt2.eu-north-1.rds.amazonaws.com -p 5432 -U postgres -W
 
 
