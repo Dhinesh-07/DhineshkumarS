@@ -3,12 +3,12 @@ package com.atdxt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.s3.S3Client;
+
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -34,24 +34,26 @@ public class EmailForgetService {
         this.userEncryptRepository = userEncryptRepository;
         this.javaMailSender = javaMailSender;
     }
-
+    @Value("${base.url}")
+    private String baseUrl;
     public ResponseEntity<String> generatePasswordResetToken(String userEmail) {
-        Optional<UserEntity> user = userRepository.findByEmail(userEmail);
+        Optional<UserEntity> userOptional = userRepository.findByEmail(userEmail);
 
-        if (user.isEmpty()) {
+
+        if (userOptional.isEmpty()) {
             logger.error("User not found for email: " + userEmail);
             return ResponseEntity.badRequest().body("User not found.");
         }
 
-
+        UserEntity user = userOptional.get();
         String token = UUID.randomUUID().toString();
-        LocalDateTime expiryDate = LocalDateTime.now().plusHours(1);
+        LocalDateTime expiryDate = LocalDateTime.now().plusMinutes(5);
 
-        EmailForget emailForget = emailForgetRepository.findByUser(user.get());
+        EmailForget emailForget = emailForgetRepository.findByUser(userOptional.get());
         if (emailForget == null) {
 
             emailForget = new EmailForget();
-            emailForget.setUser(user.get());
+            emailForget.setUser(userOptional.get());
         }
 
 
@@ -59,9 +61,12 @@ public class EmailForgetService {
         emailForget.setExpiryDate(expiryDate);
         emailForgetRepository.saveAndFlush(emailForget); // Save or update the record.
 
-        String resetLink = "http://localhost:8080/reset-password?token=" + token;
-        String emailContent = "Click the link to reset your password: " + resetLink;
-        sendEmail(userEmail, "Password Reset", emailContent);
+        String resetLink = baseUrl+"/reset-password?token=" + token;
+        String emailSubject = "Password Reset Request";
+        String emailExpiryTime = "Your password reset link will expire in 5 minutes.";
+        String emailContent = "Hi " + user.getName() + ",\n\nClick the link to reset your password: " + resetLink + "\n\n" + emailExpiryTime;
+
+        sendEmail(user.getEmail(), emailSubject, emailContent);
 
         logger.info("Token generated for user with email: " + userEmail + ", Token: " + token);
 

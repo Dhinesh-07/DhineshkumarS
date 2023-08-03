@@ -55,8 +55,10 @@ public class EmailForgetController {
         ResponseEntity<String> response = emailForgetService.generatePasswordResetToken(userEmail);
 
         modelAndView.addObject("message", response.getBody());
+        logger.info( response.getBody());
         return modelAndView;
     }
+
 
     @GetMapping("/reset-password")
     public ModelAndView showResetPasswordPage(@RequestParam("token") String token) {
@@ -89,7 +91,7 @@ public class EmailForgetController {
             return modelAndView;
         }
 
-        // Check if the passwords match
+
         if (!password.equals(password1)) {
             String errorpassword = "Passwords do not match.";
             modelAndView.addObject("errorpassword", errorpassword);
